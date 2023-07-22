@@ -1,3 +1,4 @@
 .env
 .venv
 .idea
+authentication/.mypy_cache

@@ -1,5 +1,5 @@
 """
-WSGI config for thankqa_tms project.
+WSGI config for thanqa_tms project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'thankqa_tms.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'thanqa_tms.settings')
 
 application = get_wsgi_application()

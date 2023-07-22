@@ -1,5 +1,5 @@
 """
-ASGI config for thankqa_tms project.
+ASGI config for thanqa_tms project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'thankqa_tms.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'thanqa_tms.settings')
 
 application = get_asgi_application()
