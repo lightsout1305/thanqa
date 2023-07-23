@@ -2,3 +2,4 @@
 .venv
 .idea
 authentication/.mypy_cache
+api/.mypy_cache
