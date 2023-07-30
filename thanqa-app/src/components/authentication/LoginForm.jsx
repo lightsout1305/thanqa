@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import {Button} from "./Button";
+import {Input} from "./Input";
+import {Form} from "./Form";
 
 function LoginForm() {
     const navigate = useNavigate();
@@ -14,7 +17,9 @@ function LoginForm() {
     const buttonStyle = {
         marginTop: "52px",
         marginLeft: "130px",
-        marginBottom: "90px"
+        marginBottom: "90px",
+        color: "white",
+        fontFamily: "Roboto"
     }
 
     const textStyle = {
@@ -29,12 +34,6 @@ function LoginForm() {
         marginBottom: "35px",
         marginLeft: "182px"
     }
-
-    const textButtonStyle = {
-        color: "white",
-        fontFamily: "Roboto"
-    }
-
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -69,6 +68,15 @@ function LoginForm() {
                 }
             });
     }
+
+    const changeButtonColorMouseIn = (event) => {
+        event.target.style.background = "rgba(0, 0, 0, 0.73)";
+    }
+
+    const changeButtonColorMouseOut = (event) => {
+        event.target.style.background = 'black';
+    }
+
     return (
         <form
             id="loginForm"
@@ -81,7 +89,7 @@ function LoginForm() {
             <div className="sign-in" style={textStyle}>
                     <h2 className="sign-in">Sign in</h2>
             </div>
-                    <input
+                    <Input
                         id="loginInput"
                         type="text"
                         placeholder="Enter your E-mail"
@@ -90,9 +98,10 @@ function LoginForm() {
                         onChange={(e) => setForm({ ...form, username: e.target.value })}
                         required
                         style={inputStyle}
+                        title="Enter your E-mail"
                     >
-                    </input>
-                    <input
+                    </Input>
+                    <Input
                         id="passwordInput"
                         type="text"
                         placeholder="Enter your password"
@@ -100,16 +109,18 @@ function LoginForm() {
                         value={form.password}
                         onChange={(e) => setForm({ ...form, password: e.target.value })}
                         required
-                        style={inputStyle}>
-                    </input>
-                    <button
+                        style={inputStyle}
+                        title="Enter your password"
+                        minLength="8">
+                    </Input>
+                    <Button
                         id="enterButton"
-                        className="enter-button"
+                        value="Enter"
                         type="submit"
+                        onMouseMove={changeButtonColorMouseIn}
+                        onMouseOut={changeButtonColorMouseOut}
                         style={buttonStyle}
-                        value="Enter">
-                        <h5 style={textButtonStyle}>Enter</h5>
-                    </button>
+                    />
             <h2><a className="forgot-password" href="#">Forgot your password?</a></h2>
         </form>
     )
