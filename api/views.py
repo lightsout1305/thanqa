@@ -28,4 +28,4 @@ class LoginAPIView(APIView):
         user: typing.Any = request.data.get("user", {})
         serializer: LoginSerializer = self.serializer_class(data=user)
         serializer.is_valid(raise_exception=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)

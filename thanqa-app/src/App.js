@@ -1,19 +1,23 @@
 import React from 'react';
-import { Route, Routes } from "react-router-dom";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 import './App.css';
-import AuthPage from "./pages/Login";
 import Login from "./pages/Login";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import NotificationContainer from "react-notifications";
+import Main from "./pages/Main";
 
 function App() {
     return (
-        <Routes>
-            <Route path="/" element={
-                <ProtectedRoute>
-                    <AuthPage />
-                </ProtectedRoute>} />
-            <Route path="/login/" element={ <Login /> } />
-        </Routes>
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={
+                    <ProtectedRoute>
+                        <Main />
+                    </ProtectedRoute>} />
+                <Route path="/login/" element={ <Login /> } />
+            </Routes>
+            <NotificationContainer />
+        </BrowserRouter>
     );
 }
 

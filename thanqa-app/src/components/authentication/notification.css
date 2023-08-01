@@ -1,0 +1,30 @@
+.notification__successful {
+  width: 1853px;
+  height: 1065px;
+  flex-shrink: 0;
+  fill: rgba(33, 156, 60, 0.78);
+  filter: drop-shadow(5px 5px 4px rgba(0, 0, 0, 0.25)) drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+  display: flex;
+  flex-direction: row;
+  padding: 0;
+  gap: 8px;
+  margin-left: 500px;
+}
+
+
+.notification__text {
+  color: #FFF;
+  font-family: Baloo Bhai, sans-serif;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.notification__error {
+  width: 1853px;
+  height: 1065px;
+  flex-shrink: 0;
+  fill: rgba(254, 13, 13, 0.78);
+  filter: drop-shadow(5px 5px 4px rgba(0, 0, 0, 0.25)) drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}

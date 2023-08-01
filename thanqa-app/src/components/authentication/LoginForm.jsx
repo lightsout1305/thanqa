@@ -3,6 +3,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import {Button} from "./Button";
 import {Input} from "./Input";
+import "./notification.css";
+
 
 
 function LoginForm() {
@@ -42,39 +44,60 @@ function LoginForm() {
         if (form.username == null || form.username === "") {
             event.stopPropagation();
             form.error = "Email is required";
-            const requiredLogin = document.createElement("p");
-            requiredLogin.style.marginTop = "0px";
-            requiredLogin.style.marginLeft = "35px";
-            requiredLogin.style.marginBottom = "0px";
-            requiredLogin.style.color = "#F00";
-            requiredLogin.style.fontFamily = "Inter";
-            requiredLogin.style.fontSize = "15px";
-            requiredLogin.style.fontStyle = "normal";
-            requiredLogin.style.fontWeight = "400";
-            requiredLogin.style.lineHeight = "normal";
-            requiredLogin.textContent = form.error;
-            document.getElementById("loginInput").style.border = "2px solid #FE0D0D";
-            document.getElementById("loginInput").insertAdjacentElement("beforebegin", requiredLogin);
-            document.getElementById("loginInput").style.marginBottom = "14px";
+            const checkWarning = document.getElementById("requiredLogin");
+            if (checkWarning == null) {
+                const requiredLogin = document.createElement("p");
+                requiredLogin.id = "requiredLogin";
+                requiredLogin.style.marginTop = "0px";
+                requiredLogin.style.marginLeft = "35px";
+                requiredLogin.style.marginBottom = "0px";
+                requiredLogin.style.color = "#F00";
+                requiredLogin.style.fontFamily = "Inter";
+                requiredLogin.style.fontSize = "15px";
+                requiredLogin.style.fontStyle = "normal";
+                requiredLogin.style.fontWeight = "400";
+                requiredLogin.style.lineHeight = "normal";
+                requiredLogin.textContent = form.error;
+                document.getElementById("loginInput").style.border = "2px solid #FE0D0D";
+                document.getElementById("loginInput").insertAdjacentElement("beforebegin", requiredLogin);
+                document.getElementById("loginInput").style.marginBottom = "13px";
+                document.getElementById("loginInput").addEventListener("input",
+                    function (event) {
+                    requiredLogin.remove();
+                    document.getElementById("loginInput").style.border = null;
+                    document.getElementById("loginInput").style.marginBottom = "35px";
+                })
+            }
         }
 
         if (form.password == null || form.password === "") {
             event.stopPropagation();
             form.error = "Password is required";
-            const requiredPassword = document.createElement("p");
-            requiredPassword.style.marginTop = "0px";
-            requiredPassword.style.marginLeft = "35px";
-            requiredPassword.style.marginBottom = "0px";
-            requiredPassword.style.color = "#F00";
-            requiredPassword.style.fontFamily = "Inter";
-            requiredPassword.style.fontSize = "15px";
-            requiredPassword.style.fontStyle = "normal";
-            requiredPassword.style.fontWeight = "400";
-            requiredPassword.style.lineHeight = "normal";
-            requiredPassword.textContent = form.error;
-            document.getElementById("passwordInput").style.border = "2px solid #FE0D0D";
-            document.getElementById("passwordInput").insertAdjacentElement("beforebegin", requiredPassword);
-            document.getElementById("passwordInput").style.marginBottom = "14px";
+            const checkWarning = document.getElementById("requiredPassword");
+            if (checkWarning == null) {
+                const requiredPassword = document.createElement("p");
+                requiredPassword.id = "requiredPassword";
+                requiredPassword.style.marginTop = "0px";
+                requiredPassword.style.marginLeft = "35px";
+                requiredPassword.style.marginBottom = "0px";
+                requiredPassword.style.color = "#F00";
+                requiredPassword.style.fontFamily = "Inter";
+                requiredPassword.style.fontSize = "15px";
+                requiredPassword.style.fontStyle = "normal";
+                requiredPassword.style.fontWeight = "400";
+                requiredPassword.style.lineHeight = "normal";
+                requiredPassword.textContent = form.error;
+                document.getElementById("passwordInput").style.border = "2px solid #FE0D0D";
+                document.getElementById("passwordInput").insertAdjacentElement("beforebegin",
+                    requiredPassword);
+                document.getElementById("passwordInput").style.marginBottom = "13px";
+                document.getElementById("passwordInput").addEventListener("input",
+                    function (event) {
+                    requiredPassword.remove();
+                    document.getElementById("passwordInput").style.border = null;
+                    document.getElementById("passwordInput").style.marginBottom = "35px";
+                })
+            }
         }
 
         else {
@@ -93,7 +116,6 @@ function LoginForm() {
                         user: res.data.user.email,
                         token: res.data.user.token
                     }));
-
                     navigate("/");
                 })
                 .catch((err) => {
@@ -111,7 +133,6 @@ function LoginForm() {
     const changeButtonColorMouseOut = (event) => {
         event.target.style.background = 'black';
     }
-
     return (
         <form
             id="loginForm"
