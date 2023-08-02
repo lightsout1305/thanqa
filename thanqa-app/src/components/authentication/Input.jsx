@@ -1,9 +1,10 @@
-export const Input = ({ type, id, placeholder, value, onChange, style, title, minLength }) => {
+export const Input = (
+    { type, id, placeholder, value, onChange, style, title, minLength, className }) => {
     return (
         <input
             id={id}
             type={type}
-            className="input-qa placeholder: opacity-70"
+            className={className}
             placeholder={placeholder}
             value={value}
             style={style}

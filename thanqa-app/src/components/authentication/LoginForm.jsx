@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
+import {Icon} from 'react-icons-kit';
+import {eyeOff} from 'react-icons-kit/feather/eyeOff';
+import {eye} from 'react-icons-kit/feather/eye';
 import {Button} from "./Button";
 import {Input} from "./Input";
 import "./notification.css";
-
+import "./login_page.css";
 
 
 function LoginForm() {
@@ -12,28 +15,17 @@ function LoginForm() {
     const [validated, setValidated] = useState(false);
     const [form, setForm] = useState({});
     const [error, setError] = useState(null);
-    const inputStyle = {
-        marginLeft: "35px",
-        marginBottom: "35px"
-    };
-    const buttonStyle = {
-        marginTop: "52px",
-        marginLeft: "130px",
-        marginBottom: "90px",
-        color: "white",
-        fontFamily: "Roboto"
-    };
-    const textStyle = {
-        marginTop: "35px",
-        marginBottom: "35px",
-        marginLeft: "153px",
-        marginRight: "152px"
-    };
+    const [type, setType] = useState('password');
+    const [icon, setIcon] = useState(eyeOff);
 
-    const iconStyle = {
-        marginTop: "75px",
-        marginBottom: "35px",
-        marginLeft: "182px"
+    const handleToggle = () => {
+        if (type==='password'){
+            setIcon(eye);
+            setType('text')
+        } else {
+            setIcon(eyeOff)
+            setType('password')
+        }
     }
 
     const handleSubmit = (event) => {
@@ -59,6 +51,8 @@ function LoginForm() {
                 requiredLogin.style.lineHeight = "normal";
                 requiredLogin.textContent = form.error;
                 document.getElementById("loginInput").style.border = "2px solid #FE0D0D";
+                document.getElementById("loginInput").style.width = "343px";
+                document.getElementById("loginInput").style.height = "68px";
                 document.getElementById("loginInput").insertAdjacentElement("beforebegin", requiredLogin);
                 document.getElementById("loginInput").style.marginBottom = "13px";
                 document.getElementById("loginInput").addEventListener("input",
@@ -87,21 +81,21 @@ function LoginForm() {
                 requiredPassword.style.fontWeight = "400";
                 requiredPassword.style.lineHeight = "normal";
                 requiredPassword.textContent = form.error;
-                document.getElementById("passwordInput").style.border = "2px solid #FE0D0D";
-                document.getElementById("passwordInput").insertAdjacentElement("beforebegin",
+                document.getElementById("embeddedInput").style.border = "2px solid #FE0D0D";
+                document.getElementById("embeddedInput").style.marginBottom = "15px";
+                document.getElementById("embeddedInput").insertAdjacentElement("beforebegin",
                     requiredPassword);
-                document.getElementById("passwordInput").style.marginBottom = "13px";
+                document.getElementById("embeddedInput").style.marginBottom = "-24px";
                 document.getElementById("passwordInput").addEventListener("input",
                     function (event) {
                     requiredPassword.remove();
-                    document.getElementById("passwordInput").style.border = null;
-                    document.getElementById("passwordInput").style.marginBottom = "35px";
+                    document.getElementById("embeddedInput").style.border = null;
+                    document.getElementById("embeddedInput").style.marginBottom = "0px";
                 })
             }
         }
 
-        else {
-
+        else if ((form.username != null && form.username !== "") && (form.password != null && form.password !== "")) {
             const data = {
                 "user": {
                     "email": form.username,
@@ -140,44 +134,45 @@ function LoginForm() {
             onSubmit={handleSubmit}
             noValidate
             >
-            <div className="sign-in-icon" style={iconStyle}>
-
+            <div className="sign-in-icon"/>
+            <div className="sign-in">
+                <p>Sign in</p>
             </div>
-            <div className="sign-in" style={textStyle}>
-                    <h2 className="sign-in">Sign in</h2>
+            <Input
+                id="loginInput"
+                type="text"
+                placeholder="Enter your E-mail"
+                className="input-qa"
+                value={form.username}
+                onChange={(e) => setForm({ ...form, username: e.target.value })}
+                required
+                title="Enter your E-mail"
+            >
+            </Input>
+            <div id="embeddedInput" className="embedded-input">
+                <Input
+                    id="passwordInput"
+                    type={type}
+                    placeholder="Enter your password"
+                    className="input-password-qa"
+                    value={form.password}
+                    onChange={(e) => setForm({ ...form, password: e.target.value })}
+                    required
+                    title="Enter your password"
+                    minLength="8"
+                >
+                </Input>
+                <span onClick={handleToggle}>
+                    <Icon className="absolute mr-10" icon={icon} size={25}/>
+                </span>
             </div>
-                    <Input
-                        id="loginInput"
-                        type="text"
-                        placeholder="Enter your E-mail"
-                        className="input-qa"
-                        value={form.username}
-                        onChange={(e) => setForm({ ...form, username: e.target.value })}
-                        required
-                        style={inputStyle}
-                        title="Enter your E-mail"
-                    >
-                    </Input>
-                    <Input
-                        id="passwordInput"
-                        type="password"
-                        placeholder="Enter your password"
-                        className="input-qa"
-                        value={form.password}
-                        onChange={(e) => setForm({ ...form, password: e.target.value })}
-                        required
-                        style={inputStyle}
-                        title="Enter your password"
-                        minLength="8">
-                    </Input>
-                    <Button
-                        id="enterButton"
-                        value="Enter"
-                        type="submit"
-                        onMouseMove={changeButtonColorMouseIn}
-                        onMouseOut={changeButtonColorMouseOut}
-                        style={buttonStyle}
-                    />
+            <Button
+                id="enterButton"
+                value="Enter"
+                type="submit"
+                onMouseMove={changeButtonColorMouseIn}
+                onMouseOut={changeButtonColorMouseOut}
+            />
             <h2><a className="forgot-password" href="#">Forgot your password?</a></h2>
         </form>
     )

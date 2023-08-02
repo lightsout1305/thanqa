@@ -1,0 +1,115 @@
+.loginForm {
+  width: 425px;
+  height: 795px;
+  flex-shrink: 0;
+  border-radius: 33px;
+  border: 5px solid #F5F5F5;
+  background: #F5F5F5;
+  box-shadow: -20px -20px 50px 0 rgba(0, 0, 0, 0.06), 20px 20px 50px 0 rgba(0, 0, 0, 0.07);
+  margin-left: 1000px;
+  margin-top: -100px;
+}
+
+.input-qa {
+  width: 347px;
+  height: 68px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  background: #FFF;
+  font-family: Roboto, Roboto, serif;
+  font-size: 20px;
+  margin-left: 34px;
+  margin-bottom: 35px;
+  margin-right: 34px;
+}
+
+.input-password-qa {
+  width: 310px;
+  height: 68px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  background: #FFF;
+  font-family: Roboto, Roboto, serif;
+  font-size: 20px;
+  border: none;
+  outline: none;
+}
+.enter-button {
+  width: 156px;
+  height: 69px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  background: #000;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  margin-top: 52px;
+  margin-left: 130px;
+  margin-bottom: 90px;
+  color: white;
+  font-family: "Roboto", serif;
+  font-size: 20px;
+}
+
+.hide-password {
+  position: absolute;
+  width: 100%;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.sign-in {
+  width: 120px;
+  height: 65px;
+  flex-shrink: 0;
+  color: #000;
+  font-family: Baloo Bhai, sans-serif;
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin: 35px 152px 35px 153px;
+}
+
+.sign-in-icon {
+  width: 62px;
+  height: 64px;
+  flex-shrink: 0;
+  background: url("../../Sign_in_squre_fill.svg");
+  margin-top: 75px;
+  margin-bottom: 35px;
+  margin-left: 182px;
+}
+
+.thanqa-logo {
+  margin: 200px 960px 100px 224px;
+  width: 750px;
+  height: 557px;
+  flex-shrink: 0;
+  background: url("../../thanqa-low-resolution-logo-black-on-white-background.svg");
+}
+
+.forgot-password {
+  width: 271px;
+  height: 32px;
+  flex-shrink: 0;
+  color: #000;
+  text-align: center;
+  font-family: Roboto, Roboto, serif;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  text-decoration: none;
+  margin-bottom: 97px;
+  margin-left: 88px;
+}
+
+.embedded-input {
+  border-radius: 8px;
+  border: none;
+  background: #FFF;
+  margin-left: 34px;
+  margin-right: 40px;
+
+}
