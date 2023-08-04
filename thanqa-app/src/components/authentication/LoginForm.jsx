@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 import {Icon} from 'react-icons-kit';
@@ -9,12 +9,9 @@ import {Input} from "./Input";
 import "./notification.css";
 import "./login_page.css";
 
-
 function LoginForm() {
     const navigate = useNavigate();
-    const [validated, setValidated] = useState(false);
     const [form, setForm] = useState({});
-    const [error, setError] = useState(null);
     const [type, setType] = useState('password');
     const [icon, setIcon] = useState(eyeOff);
 
@@ -28,10 +25,44 @@ function LoginForm() {
         }
     }
 
+    const showNotification = (type, serverResponse) => {
+        if (type === 'successful') {
+            const notification = document.createElement('div');
+            notification.id = "successNotification";
+            notification.className = "notification__successful";
+            const notificationText = document.createElement('p');
+            notificationText.textContent = "Authorization successful";
+            notificationText.className = "notification__text";
+            const notificationIcon = document.createElement('div');
+            notificationIcon.className = "notification__successful__icon";
+            document.getElementById("root").insertAdjacentElement('afterend', notification);
+            notification.insertAdjacentElement('beforeend', notificationText);
+            notification.insertAdjacentElement('beforeend', notificationIcon);
+            setTimeout(function () {
+                notification.remove()
+            }, 2000);
+        }
+
+        if (type === 'error') {
+            const notification = document.createElement('div');
+            notification.id = "errorNotification";
+            notification.className = "notification__error";
+            const notificationText = document.createElement('p');
+            notificationText.textContent = serverResponse;
+            notificationText.className = "notification__text";
+            const notificationIcon = document.createElement('div');
+            notificationIcon.className = "notification__error__icon";
+            document.getElementById("root").insertAdjacentElement('afterend', notification);
+            notification.insertAdjacentElement('beforeend', notificationText);
+            notification.insertAdjacentElement('beforeend', notificationIcon);
+            setTimeout(function () {
+                notification.remove()
+            }, 2000);
+        }
+    }
+
     const handleSubmit = (event) => {
         event.preventDefault();
-
-        setValidated(true);
 
         if (form.username == null || form.username === "") {
             event.stopPropagation();
@@ -110,11 +141,17 @@ function LoginForm() {
                         user: res.data.user.email,
                         token: res.data.user.token
                     }));
-                    navigate("/");
+                    navigate("/main/");
                 })
                 .catch((err) => {
-                    if (err.message) {
-                        setError(err.request.response);
+                    if (err.response.data["user"]["errors"]["email"]) {
+                        showNotification("error", err.response.data["user"]["errors"]["email"]);
+                    }
+                    else if (err.response.data["user"]["errors"]["password"]) {
+                        showNotification("error", err.response.data["user"]["errors"]["password"]);
+                    }
+                    else {
+                        showNotification("error", err.response.data["user"]["errors"]["error"]);
                     }
                 });
             }

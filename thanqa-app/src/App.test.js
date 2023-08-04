@@ -1,8 +1,9 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
+import LoginForm from "./components/authentication/LoginForm";
 
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+test('ThanQA logo is present', () => {
+  render(<LoginForm />);
+  const ThanQALogo = document.getElementsByClassName("thanqa-logo");
+  expect(ThanQALogo).toBeInTheDocument();
 });

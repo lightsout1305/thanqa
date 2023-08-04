@@ -75,7 +75,7 @@
   width: 62px;
   height: 64px;
   flex-shrink: 0;
-  background: url("../../Sign_in_squre_fill.svg");
+  background: url("../icons/Sign_in_squre_fill.svg");
   margin-top: 75px;
   margin-bottom: 35px;
   margin-left: 182px;
@@ -86,7 +86,7 @@
   width: 750px;
   height: 557px;
   flex-shrink: 0;
-  background: url("../../thanqa-low-resolution-logo-black-on-white-background.svg");
+  background: url("../icons/thanqa-low-resolution-logo-black-on-white-background.svg");
 }
 
 .forgot-password {
@@ -111,5 +111,4 @@
   background: #FFF;
   margin-left: 34px;
   margin-right: 40px;
-
 }

@@ -1,12 +1,12 @@
-import "./notification.css";
-
-export const Notification = ({ type, description }) => {
-    return (
-        <div className={`notification notification__${type}`}>
+export const NotificationQA = ({type, description}) => {
+    if (type === "successful") {
+        return (
+        <div id="successNotification" className={`notification__${type}`}>
             <p className="notification__text">
                 {description}
             </p>
-            <img src="../../Check_round_fill.svg" alt="success" />
+            <div className="notification__icon"/>
         </div>
-    )
+        )
+    }
 }
