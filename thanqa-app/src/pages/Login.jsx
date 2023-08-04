@@ -3,10 +3,9 @@ import LoginForm from "../components/authentication/LoginForm";
 
 function AuthPage() {
     return (
-        <div className="thanqa-logo">
-            <div>
-                <LoginForm />
-            </div>
+        <div id="authPage">
+            <div className="thanqa-logo"/>
+            <LoginForm/>
         </div>
     );
 }

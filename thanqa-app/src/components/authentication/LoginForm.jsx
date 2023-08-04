@@ -210,7 +210,7 @@ function LoginForm() {
                 onMouseMove={changeButtonColorMouseIn}
                 onMouseOut={changeButtonColorMouseOut}
             />
-            <h2><a className="forgot-password" href="#">Forgot your password?</a></h2>
+            <h2 className="forgot-password"><a className="forgot-password" href="#">Forgot your password?</a></h2>
         </form>
     )
 }

@@ -8,8 +8,9 @@
   border-radius: 14px;
   opacity: 0.8;
   background: #54B86A;
-  margin-left: 75%;
-  margin-top: -5%;
+  position: absolute;
+  bottom: 5%;
+  right: 3%;
   animation: opacityOn 2s;
 }
 
@@ -45,8 +46,9 @@
   align-items: center;
   border-radius: 14px;
   opacity: 0.8;
-  margin-left: 75%;
-  margin-top: -5%;
+  position: absolute;
+  bottom: 5%;
+  right: 2%;
   animation: opacityOn 2.2s;
   background: #FE0D0D;
 }
