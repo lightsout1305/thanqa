@@ -65,7 +65,7 @@ class TestLogin(TestCase):
             }, timeout=10)
         self.assertEqual(login_api_with_incorrect_email.status_code, 400)
         self.assertEqual(login_api_with_incorrect_email.json()["user"]["errors"]["error"][0],
-                         "Неверный логин или пароль")
+                         "Invalid login or password")
 
         login_api_with_incorrect_password: Response = \
             requests.post("http://127.0.0.1:8000/api/users/login/", json={
@@ -76,7 +76,7 @@ class TestLogin(TestCase):
             }, timeout=10)
         self.assertEqual(login_api_with_incorrect_password.status_code, 400)
         self.assertEqual(login_api_with_incorrect_password.json()["user"]["errors"]["error"][0],
-                         "Неверный логин или пароль")
+                         "Invalid login or password")
 
         login_api_with_both_incorrect_email_and_password: Response = \
             requests.post("http://127.0.0.1:8000/api/users/login/", json={
@@ -88,7 +88,7 @@ class TestLogin(TestCase):
         self.assertEqual(login_api_with_both_incorrect_email_and_password.status_code, 400)
         self.assertEqual(login_api_with_both_incorrect_email_and_password.json()
                          ["user"]["errors"]["error"][0],
-                         "Неверный логин или пароль")
+                         "Invalid login or password")
 
     def test_login_api_returns_400_if_login_or_password_is_null(self) -> None:
         """
@@ -106,7 +106,7 @@ class TestLogin(TestCase):
             }, timeout=10)
         self.assertEqual(login_api_with_no_email.status_code, 400)
         self.assertEqual(login_api_with_no_email.json()["user"]["errors"]["email"][0],
-                         "Введите ваш E-mail")
+                         "Enter your E-mail")
 
         login_api_with_no_password: Response = \
             requests.post("http://127.0.0.1:8000/api/users/login/", json={
@@ -117,7 +117,7 @@ class TestLogin(TestCase):
             }, timeout=10)
         self.assertEqual(login_api_with_no_password.status_code, 400)
         self.assertEqual(login_api_with_no_password.json()["user"]["errors"]["password"][0],
-                         "Введите ваш пароль")
+                         "Enter your password")
 
         login_api_with_no_email_and_password: Response = \
             requests.post("http://127.0.0.1:8000/api/users/login/", json={
@@ -128,10 +128,10 @@ class TestLogin(TestCase):
             }, timeout=10)
         self.assertEqual(login_api_with_no_email_and_password.status_code, 400)
         self.assertEqual(login_api_with_no_email_and_password.json()["user"]["errors"]["email"][0],
-                         "Введите ваш E-mail")
+                         "Enter your E-mail")
         self.assertEqual(login_api_with_no_email_and_password.json()
                          ["user"]["errors"]["password"][0],
-                         "Введите ваш пароль")
+                         "Enter your password")
 
         login_api_with_blank_email: Response = \
             requests.post("http://127.0.0.1:8000/api/users/login/", json={
@@ -142,7 +142,7 @@ class TestLogin(TestCase):
             }, timeout=10)
         self.assertEqual(login_api_with_blank_email.status_code, 400)
         self.assertEqual(login_api_with_blank_email.json()["user"]["errors"]["email"][0],
-                         "Введите ваш E-mail")
+                         "Enter your E-mail")
 
         login_api_with_blank_password: Response = \
             requests.post("http://127.0.0.1:8000/api/users/login/", json={
@@ -153,7 +153,7 @@ class TestLogin(TestCase):
             }, timeout=10)
         self.assertEqual(login_api_with_blank_password.status_code, 400)
         self.assertEqual(login_api_with_blank_password.json()["user"]["errors"]["password"][0],
-                         "Введите ваш пароль")
+                         "Enter your password")
 
         login_api_with_both_blank_email_and_password: Response = \
             requests.post("http://127.0.0.1:8000/api/users/login/", json={
@@ -165,7 +165,7 @@ class TestLogin(TestCase):
         self.assertEqual(login_api_with_both_blank_email_and_password.status_code, 400)
         self.assertEqual(login_api_with_both_blank_email_and_password.json()
                          ["user"]["errors"]["email"][0],
-                         "Введите ваш E-mail")
+                         "Enter your E-mail")
         self.assertEqual(login_api_with_both_blank_email_and_password.json()
                          ["user"]["errors"]["password"][0],
-                         "Введите ваш пароль")
+                         "Enter your password")
