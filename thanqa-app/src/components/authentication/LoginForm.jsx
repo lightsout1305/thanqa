@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import axios from "axios";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {Icon} from 'react-icons-kit';
 import {eyeOff} from 'react-icons-kit/feather/eyeOff';
 import {eye} from 'react-icons-kit/feather/eye';
@@ -11,12 +11,14 @@ import "./login_page.css";
 
 function LoginForm() {
     const navigate = useNavigate();
-    const [form, setForm] = useState({});
+    const [form, ] = useState({});
     const [type, setType] = useState('password');
     const [icon, setIcon] = useState(eyeOff);
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
 
     const handleToggle = () => {
-        if (type==='password'){
+        if (type === 'password'){
             setIcon(eye);
             setType('text')
         } else {
@@ -64,7 +66,7 @@ function LoginForm() {
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        if (form.username == null || form.username === "") {
+        if (username == null || username === "") {
             event.stopPropagation();
             form.error = "Email is required";
             const checkWarning = document.getElementById("requiredLogin");
@@ -95,7 +97,7 @@ function LoginForm() {
             }
         }
 
-        if (form.password == null || form.password === "") {
+        if (password == null || password === "") {
             event.stopPropagation();
             form.error = "Password is required";
             const checkWarning = document.getElementById("requiredPassword");
@@ -126,11 +128,11 @@ function LoginForm() {
             }
         }
 
-        else if ((form.username != null && form.username !== "") && (form.password != null && form.password !== "")) {
+        else if ((username != null && username !== "") && (password != null && password !== "")) {
             const data = {
                 "user": {
-                    "email": form.username,
-                    "password": form.password,
+                    "email": username,
+                    "password": password,
                 }
             };
 
@@ -180,8 +182,8 @@ function LoginForm() {
                 type="text"
                 placeholder="Enter your E-mail"
                 className="input-qa"
-                value={form.username}
-                onChange={(e) => setForm({ ...form, username: e.target.value })}
+                value={username}
+                onChange={e => setUsername(e.target.value)}
                 required
                 title="Enter your E-mail"
             >
@@ -192,8 +194,8 @@ function LoginForm() {
                     type={type}
                     placeholder="Enter your password"
                     className="input-password-qa"
-                    value={form.password}
-                    onChange={(e) => setForm({ ...form, password: e.target.value })}
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
                     required
                     title="Enter your password"
                     minLength="8"
@@ -210,7 +212,7 @@ function LoginForm() {
                 onMouseMove={changeButtonColorMouseIn}
                 onMouseOut={changeButtonColorMouseOut}
             />
-            <h2 className="forgot-password"><a className="forgot-password" href="#">Forgot your password?</a></h2>
+            <h2 className="forgot-password">Forgot your password?</h2>
         </form>
     )
 }
