@@ -28,8 +28,9 @@ class UserManager(BaseUserManager):
 
         if email is None:
             raise TypeError("У пользователей должен быть email")
-        user: typing.Any = self.model(username=username,
-                                      email=self.normalize_email(email))
+        user: typing.Any = self.model(
+            username=username,
+            email=self.normalize_email(email))
         user.set_password(password)
         user.save()
 
