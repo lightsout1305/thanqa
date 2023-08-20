@@ -84,7 +84,7 @@ function LoginForm() {
                 requiredLogin.style.lineHeight = "normal";
                 requiredLogin.textContent = form.error;
                 document.getElementById("loginInput").style.border = "2px solid #FE0D0D";
-                document.getElementById("loginInput").style.width = "343px";
+                document.getElementById("loginInput").style.width = "321px";
                 document.getElementById("loginInput").style.height = "68px";
                 document.getElementById("loginInput").insertAdjacentElement("beforebegin", requiredLogin);
                 document.getElementById("loginInput").style.marginBottom = "13px";
@@ -92,6 +92,7 @@ function LoginForm() {
                     function (event) {
                     requiredLogin.remove();
                     document.getElementById("loginInput").style.border = null;
+                    document.getElementById("loginInput").style.width = "325px";
                     document.getElementById("loginInput").style.marginBottom = "35px";
                 })
             }
