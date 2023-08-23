@@ -1,3 +1,4 @@
-from django.shortcuts import render
+"""
+Модуль с представлениями приложения testware
+"""
 
-# Create your views here.

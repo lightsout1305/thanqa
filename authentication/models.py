@@ -116,4 +116,4 @@ class User(AbstractBaseUser, PermissionsMixin):
             "ExpirationDate": int(expiration_date.strftime("%Y%m%d%H%M%S"))
         }, settings.SECRET_KEY, algorithm="HS256")
 
-        return token.encode(encoding="utf-8").decode(encoding="utf-8")
+        return bytes(token).decode("utf-8")

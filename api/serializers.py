@@ -5,6 +5,7 @@ import typing
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 from authentication.models import User
+from testware.models import TestPlan
 
 
 class LoginSerializer(serializers.Serializer):
@@ -13,10 +14,12 @@ class LoginSerializer(serializers.Serializer):
     """
     email: serializers.CharField = \
         serializers.CharField(
-            max_length=255, error_messages={"null": "Enter your E-mail",
-                                            "blank": "Enter your E-mail"})
-    username: serializers.CharField = serializers.CharField(max_length=255,
-                                                            read_only=True)
+            max_length=255,
+            error_messages={"null": "Enter your E-mail",
+                            "blank": "Enter your E-mail"})
+    username: serializers.CharField = serializers.CharField(
+        max_length=255,
+        read_only=True)
     password: serializers.CharField = \
         serializers.CharField(
             max_length=128,
@@ -54,8 +57,72 @@ class LoginSerializer(serializers.Serializer):
             "token": user.token
         }
 
-    def create(self, validated_data):
+    def create(self, validated_data) -> typing.Any:
         pass
 
-    def update(self, instance, validated_data):
+    def update(self, instance, validated_data) -> typing.Any:
+        pass
+
+
+class TestPlanSerializer(serializers.Serializer):
+    """
+    Сериализация методов тест-плана
+    """
+    title: serializers.CharField = serializers.CharField(
+        max_length=255,
+        required=True,
+        error_messages={"blank": "Title is required",
+                        "null": "Title is required"}
+    )
+    description: serializers.CharField = serializers.CharField(
+        required=False,
+        allow_null=True,
+        allow_blank=True,
+        write_only=True
+    )
+    is_current: serializers.BooleanField = serializers.BooleanField(
+        required=False,
+        default=False
+    )
+    start_date: serializers.DateTimeField = serializers.DateTimeField(
+        required=False,
+        allow_null=True,
+        write_only=True
+    )
+    end_date: serializers.DateTimeField = serializers.DateTimeField(
+        required=False,
+        allow_null=True,
+        write_only=True
+    )
+    author: serializers.IntegerField = serializers.IntegerField(
+        required=False,
+        allow_null=True
+    )
+
+    def validate(self, attrs: typing.Any) -> dict:
+        """
+        Валидация данных тест-плана
+        :param attrs: Any
+        :return: dict
+        """
+        title: str = attrs.get("title")
+        author: int = attrs.get("author")
+        is_current: bool = attrs.get("is_current")
+
+        if attrs['start_date'] is not None and attrs['end_date'] is not None:
+            if attrs['start_date'] > attrs['end_date']:
+                raise serializers.ValidationError(
+                    "Incorrect date"
+                )
+
+        return {
+            "title": title,
+            "author": author,
+            "is_current": is_current
+        }
+
+    def create(self, validated_data) -> typing.Any:
+        pass
+
+    def update(self, instance, validated_data) -> typing.Any:
         pass
