@@ -5,7 +5,6 @@ import typing
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 from authentication.models import User
-from testware.models import TestPlan
 
 
 class LoginSerializer(serializers.Serializer):
@@ -108,12 +107,23 @@ class TestPlanSerializer(serializers.Serializer):
         title: str = attrs.get("title")
         author: int = attrs.get("author")
         is_current: bool = attrs.get("is_current")
+        active_authors: typing.Any = \
+            [a for a in User.objects.filter(is_active=True).values_list('id', flat=True)]
 
-        if attrs['start_date'] is not None and attrs['end_date'] is not None:
-            if attrs['start_date'] > attrs['end_date']:
+        if author is not None:
+            if author not in active_authors:
                 raise serializers.ValidationError(
-                    "Incorrect date"
+                    "No such author"
                 )
+
+        try:
+            if attrs['start_date'] is not None and attrs['end_date'] is not None:
+                if attrs['start_date'] > attrs['end_date']:
+                    raise serializers.ValidationError(
+                        "Incorrect date"
+                    )
+        except KeyError:
+            pass
 
         return {
             "title": title,

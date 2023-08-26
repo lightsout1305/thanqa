@@ -4,7 +4,6 @@
 import pytz
 from django.test import TestCase
 from django.utils import timezone
-
 from authentication.models import User
 from .models import TestPlan
 

@@ -12,6 +12,7 @@ from .serializers import LoginSerializer, TestPlanSerializer
 from .renderers import UserJSONRenderer, TestPlanJSONRenderer
 
 from testware.models import TestPlan
+from authentication.models import User
 
 
 class LoginAPIView(APIView):
@@ -48,16 +49,42 @@ class CreateTestPlanAPIView(APIView):
         :param request: Request
         :return: Response
         """
-        test_plan: typing.Any = request.data.get("test_plan", {})
-        serializer: TestPlanSerializer = self.serializer_class(data=test_plan)
+        test_plan_data: typing.Any = request.data.get("test_plan", {})
+
+        try:
+            description = test_plan_data["description"]
+        except KeyError:
+            description = None
+
+        try:
+            author = test_plan_data["author"]
+        except KeyError:
+            author = None
+
+        try:
+            start_date = test_plan_data["start_date"]
+        except KeyError:
+            start_date = None
+
+        try:
+            end_date = test_plan_data["end_date"]
+        except KeyError:
+            end_date = None
+
+        try:
+            is_current = test_plan_data["is_current"]
+        except KeyError:
+            is_current = False
+
+        serializer: TestPlanSerializer = self.serializer_class(data=test_plan_data)
         if serializer.is_valid(raise_exception=True):
-            tp: TestPlan = TestPlan.objects.create(
-                title=test_plan["title"],
-                description=test_plan["description"],
-                author_id=test_plan["author"],
-                is_current=test_plan["is_current"],
-                start_date=test_plan["start_date"],
-                end_date=test_plan["end_date"]
+            test_plan: TestPlan = TestPlan.objects.create(
+                title=test_plan_data["title"],
+                description=description,
+                author_id=author,
+                is_current=is_current,
+                start_date=start_date,
+                end_date=end_date
             )
-            tp.save()
+            test_plan.save()
             return Response(data=serializer.data, status=status.HTTP_200_OK)
