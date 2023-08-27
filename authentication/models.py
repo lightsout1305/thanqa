@@ -111,9 +111,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         """
         expiration_date: datetime = datetime.now() + timedelta(days=1)
 
-        token: str = jwt.encode({
+        token: bytes = jwt.encode({
             "UserId": self.pk,
             "ExpirationDate": int(expiration_date.strftime("%Y%m%d%H%M%S"))
         }, settings.SECRET_KEY, algorithm="HS256")
 
-        return bytes(token).decode("utf-8")
+        return token.decode("utf-8")

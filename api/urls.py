@@ -1,3 +1,6 @@
+"""
+Модуль с URL-адресами приложения api
+"""
 from django.urls import path
 from api import views
 

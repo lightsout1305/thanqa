@@ -5,13 +5,15 @@ import requests
 import environ
 from django.test import TestCase
 from requests import Response
+from requests.auth import AuthBase
 from thanqa_tms.settings import BASE_DIR
 
 
-class BearerAuth(requests.auth.AuthBase):
+class BearerAuth(AuthBase):
     """
     Авторизация с помощью токена
     """
+    # pylint: disable=too-few-public-methods
 
     def __init__(self, token):
         self.token = token
@@ -189,6 +191,7 @@ class TestCreateTestPlan(TestCase):
     Тестирование метода CreateTestPlan
     """
     # pylint: disable=attribute-defined-outside-init
+    # pylint: disable=too-many-instance-attributes
 
     env: environ.Env = environ.Env()
     env.read_env(BASE_DIR, ".env")
@@ -200,7 +203,8 @@ class TestCreateTestPlan(TestCase):
         """
         self.title: str = "Релиз-план 2023.16 по функционалу добавления/редактирования" \
                           "/прочтения/удаления тест-плана"
-        self.description: str = open('./description_for_test_plan.txt', encoding='utf-8').read()
+        with open('./description_for_test_plan.txt', encoding='utf-8') as file:
+            self.description = file.read()
         self.author: int = 1
         self.is_current: bool = True
         self.testing_start_date: str = "2023-08-23T20:38:43.469088Z"
@@ -208,7 +212,7 @@ class TestCreateTestPlan(TestCase):
         self.wrong_testing_end_date: str = "2023-07-30T20:38:43.469088Z"
         self.correct_email: str = self.env.str("MAIL")
         self.correct_password: str = self.env.str("PASSWORD")
-        self.headersAuth = {"Authorization": "Bearer " + ""}
+        self.headers_auth = {"Authorization": "Bearer " + ""}
         self.token: str = \
             requests.post("http://127.0.0.1:8000/api/users/login/", json={
                 "user": {
@@ -216,6 +220,10 @@ class TestCreateTestPlan(TestCase):
                     "password": self.correct_password
                 }
             }, timeout=10).json()["user"]["token"]
+        self.successful_data: dict
+        self.successful_create_test_plan: Response
+        self.successful_data_with_only_title: dict
+        self.unsuccessful_create_test_plan: Response
 
     def test_create_test_plan_returns_200(self) -> None:
         """
@@ -223,7 +231,7 @@ class TestCreateTestPlan(TestCase):
         и создает тест-план, если все поля введены.
         :return: None
         """
-        self.successful_data: dict = {
+        self.successful_data = {
             "test_plan": {
                 "title": self.title,
                 "description": self.description,
@@ -233,11 +241,12 @@ class TestCreateTestPlan(TestCase):
                 "is_current": self.is_current
             }
         }
-        self.successful_create_test_plan: Response = requests.post(
+        self.successful_create_test_plan = requests.post(
             'http://127.0.0.1:8000/api/testplan/create/',
-            headers=self.headersAuth,
+            headers=self.headers_auth,
             auth=BearerAuth(token=self.token),
-            json=self.successful_data
+            json=self.successful_data,
+            timeout=10
         )
         self.assertEqual(self.successful_create_test_plan.status_code, 200)
         self.assertEqual(
@@ -263,7 +272,7 @@ class TestCreateTestPlan(TestCase):
         и создает тест-план, если введен только заголовок.
         :return: None
         """
-        self.successful_data: dict = {
+        self.successful_data = {
             "test_plan": {
                 "title": self.title,
                 "description": None,
@@ -273,14 +282,14 @@ class TestCreateTestPlan(TestCase):
                 "is_current": False
             }
         }
-        self.successful_data_with_only_title: dict = {
+        self.successful_data_with_only_title = {
             "test_plan": {
                 "title": self.title
             }
         }
-        self.successful_create_test_plan: Response = requests.post(
+        self.successful_create_test_plan = requests.post(
             'http://127.0.0.1:8000/api/testplan/create/',
-            headers=self.headersAuth,
+            headers=self.headers_auth,
             auth=BearerAuth(token=self.token),
             json=self.successful_data_with_only_title,
             timeout=10
@@ -297,9 +306,9 @@ class TestCreateTestPlan(TestCase):
             self.successful_create_test_plan.json()["test_plan"]["author"], None
         )
 
-        self.successful_create_test_plan: Response = requests.post(
+        self.successful_create_test_plan = requests.post(
             'http://127.0.0.1:8000/api/testplan/create/',
-            headers=self.headersAuth,
+            headers=self.headers_auth,
             auth=BearerAuth(token=self.token),
             json=self.successful_data_with_only_title,
             timeout=10
@@ -332,9 +341,9 @@ class TestCreateTestPlan(TestCase):
                 "is_current": self.is_current
             }
         }
-        self.unsuccessful_create_test_plan: Response = requests.post(
+        self.unsuccessful_create_test_plan = requests.post(
             'http://127.0.0.1:8000/api/testplan/create/',
-            headers=self.headersAuth,
+            headers=self.headers_auth,
             auth=BearerAuth(token=self.token),
             json=self.unsuccessful_data,
             timeout=10
@@ -354,9 +363,9 @@ class TestCreateTestPlan(TestCase):
                 "is_current": self.is_current
             }
         }
-        self.unsuccessful_create_test_plan: Response = requests.post(
+        self.unsuccessful_create_test_plan = requests.post(
             'http://127.0.0.1:8000/api/testplan/create/',
-            headers=self.headersAuth,
+            headers=self.headers_auth,
             auth=BearerAuth(token=self.token),
             json=self.unsuccessful_data_with_blank_title,
             timeout=10
@@ -376,9 +385,9 @@ class TestCreateTestPlan(TestCase):
                 "is_current": self.is_current
             }
         }
-        self.unsuccessful_create_test_plan: Response = requests.post(
+        self.unsuccessful_create_test_plan = requests.post(
             'http://127.0.0.1:8000/api/testplan/create/',
-            headers=self.headersAuth,
+            headers=self.headers_auth,
             auth=BearerAuth(token=self.token),
             json=self.unsuccessful_data_with_only_title,
             timeout=10
@@ -404,9 +413,9 @@ class TestCreateTestPlan(TestCase):
                 "is_current": self.is_current
             }
         }
-        self.unsuccessful_create_test_plan: Response = requests.post(
+        self.unsuccessful_create_test_plan = requests.post(
             'http://127.0.0.1:8000/api/testplan/create/',
-            headers=self.headersAuth,
+            headers=self.headers_auth,
             auth=BearerAuth(token=self.token),
             json=self.unsuccessful_data_with_wrong_start_date_format,
             timeout=10
@@ -428,9 +437,9 @@ class TestCreateTestPlan(TestCase):
                 "is_current": self.is_current
             }
         }
-        self.unsuccessful_create_test_plan: Response = requests.post(
+        self.unsuccessful_create_test_plan = requests.post(
             'http://127.0.0.1:8000/api/testplan/create/',
-            headers=self.headersAuth,
+            headers=self.headers_auth,
             auth=BearerAuth(token=self.token),
             json=self.unsuccessful_data_with_wrong_end_date_format,
             timeout=10
@@ -452,9 +461,9 @@ class TestCreateTestPlan(TestCase):
                 "is_current": self.is_current
             }
         }
-        self.unsuccessful_create_test_plan: Response = requests.post(
+        self.unsuccessful_create_test_plan = requests.post(
             'http://127.0.0.1:8000/api/testplan/create/',
-            headers=self.headersAuth,
+            headers=self.headers_auth,
             auth=BearerAuth(token=self.token),
             json=self.unsuccessful_data_with_wrong_start_and_end_date_format,
             timeout=10
@@ -487,9 +496,9 @@ class TestCreateTestPlan(TestCase):
                 "is_current": self.is_current
             }
         }
-        self.unsuccessful_create_test_plan: Response = requests.post(
+        self.unsuccessful_create_test_plan = requests.post(
             'http://127.0.0.1:8000/api/testplan/create/',
-            headers=self.headersAuth,
+            headers=self.headers_auth,
             auth=BearerAuth(token=self.token),
             json=self.unsuccessful_data_less_end_date,
             timeout=10
@@ -516,9 +525,9 @@ class TestCreateTestPlan(TestCase):
                 "is_current": self.is_current
             }
         }
-        self.unsuccessful_create_test_plan: Response = requests.post(
+        self.unsuccessful_create_test_plan = requests.post(
             'http://127.0.0.1:8000/api/testplan/create/',
-            headers=self.headersAuth,
+            headers=self.headers_auth,
             auth=BearerAuth(token=self.token),
             json=self.unsuccessful_data_no_author_in_database,
             timeout=10
@@ -539,9 +548,9 @@ class TestCreateTestPlan(TestCase):
                 "is_current": self.is_current
             }
         }
-        self.unsuccessful_create_test_plan: Response = requests.post(
+        self.unsuccessful_create_test_plan = requests.post(
             'http://127.0.0.1:8000/api/testplan/create/',
-            headers=self.headersAuth,
+            headers=self.headers_auth,
             auth=BearerAuth(token=self.token),
             json=self.unsuccessful_data_incorrect_author,
             timeout=10
@@ -562,9 +571,9 @@ class TestCreateTestPlan(TestCase):
                 "is_current": self.is_current
             }
         }
-        self.unsuccessful_create_test_plan: Response = requests.post(
+        self.unsuccessful_create_test_plan = requests.post(
             'http://127.0.0.1:8000/api/testplan/create/',
-            headers=self.headersAuth,
+            headers=self.headers_auth,
             auth=BearerAuth(token=self.token),
             json=self.unsuccessful_data_inactive_author,
             timeout=10
@@ -580,14 +589,14 @@ class TestCreateTestPlan(TestCase):
         Тест-кейс, что метод возвращает 403, если пользователь не авторизован.
         :return: None
         """
-        self.successful_data_with_only_title: dict = {
+        self.successful_data_with_only_title = {
             "test_plan": {
                 "title": self.title
             }
         }
-        self.unsuccessful_create_test_plan: Response = requests.post(
+        self.unsuccessful_create_test_plan = requests.post(
             'http://127.0.0.1:8000/api/testplan/create/',
-            headers=self.headersAuth,
+            headers=self.headers_auth,
             json=self.successful_data_with_only_title,
             timeout=10
         )
@@ -602,15 +611,17 @@ class TestCreateTestPlan(TestCase):
         если JWT-токен просрочен.
         :return: None
         """
-        self.successful_data_with_only_title: dict = {
+        self.successful_data_with_only_title = {
             "test_plan": {
                 "title": self.title
             }
         }
-        self.unsuccessful_create_test_plan: Response = requests.post(
+        with open('./expired_token.txt', encoding='utf-8') as file:
+            self.expired_token = file.read()
+        self.unsuccessful_create_test_plan = requests.post(
             'http://127.0.0.1:8000/api/testplan/create/',
-            auth=BearerAuth(token=open('./expired_token.txt', encoding="utf-8").read()),
-            headers=self.headersAuth,
+            auth=BearerAuth(token=self.expired_token),
+            headers=self.headers_auth,
             json=self.successful_data_with_only_title,
             timeout=10
         )

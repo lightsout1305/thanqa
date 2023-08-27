@@ -8,11 +8,9 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework.views import APIView
+from testware.models import TestPlan
 from .serializers import LoginSerializer, TestPlanSerializer
 from .renderers import UserJSONRenderer, TestPlanJSONRenderer
-
-from testware.models import TestPlan
-from authentication.models import User
 
 
 class LoginAPIView(APIView):
@@ -88,3 +86,4 @@ class CreateTestPlanAPIView(APIView):
             )
             test_plan.save()
             return Response(data=serializer.data, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_400_BAD_REQUEST)

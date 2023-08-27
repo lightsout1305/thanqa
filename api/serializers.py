@@ -108,7 +108,7 @@ class TestPlanSerializer(serializers.Serializer):
         author: int = attrs.get("author")
         is_current: bool = attrs.get("is_current")
         active_authors: typing.Any = \
-            [a for a in User.objects.filter(is_active=True).values_list('id', flat=True)]
+            list(User.objects.filter(is_active=True).values_list('id', flat=True))
 
         if author is not None:
             if author not in active_authors:
