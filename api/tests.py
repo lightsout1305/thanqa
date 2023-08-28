@@ -1187,3 +1187,186 @@ class TestUpdateTestPlan(TestCase):
         self.assertEqual(
             self.unsuccessful_update_test_plan.json()["test_plan"]["detail"],
             "Token has expired")
+
+
+class TestDeleteTestPlan(TestCase):
+    """
+    Тестирование метода удаления тест-плана
+    """
+    # pylint: disable=attribute-defined-outside-init
+    # pylint: disable=too-many-instance-attributes
+
+    env: environ.Env = environ.Env()
+    env.read_env(BASE_DIR, ".env")
+
+    def setUp(self) -> None:
+        """
+        Инициализация тестовых данных
+        :return: None
+        """
+        self.test_plan_id: int
+        self.correct_email: str = self.env.str("MAIL")
+        self.correct_password: str = self.env.str("PASSWORD")
+        self.headers_auth = {"Authorization": "Bearer " + ""}
+        self.token: str = \
+            requests.post("http://127.0.0.1:8000/api/users/login/", json={
+                "user": {
+                    "email": self.correct_email,
+                    "password": self.correct_password
+                }
+            }, timeout=10).json()["user"]["token"]
+        self.successful_data: dict
+        self.unsuccessful_data: dict
+        self.successful_delete_test_plan: Response
+        self.unsuccessful_delete_test_plan: Response
+
+    def test_delete_test_plan_returns_200(self) -> None:
+        """
+        Тест-кейс, что метод удаления тест-плана возвращает 200,
+        если тест-план есть в БД и он не удален.
+        :return: None
+        """
+        self.test_plan_id = int(input("Enter test plan ID for deletion: "))
+        self.successful_data = {
+            "test_plan": {
+                "test_plan_id": self.test_plan_id
+            }
+        }
+        self.successful_delete_test_plan = requests.delete(
+            "http://127.0.0.1:8000/api/testplan/delete/",
+            headers=self.headers_auth,
+            auth=BearerAuth(token=self.token),
+            json=self.successful_data,
+            timeout=10
+        )
+        self.assertEqual(self.successful_delete_test_plan.status_code, 200)
+        self.assertEqual(
+            self.successful_delete_test_plan.json()["test_plan"]["test_plan_id"], self.test_plan_id)
+
+    def test_delete_test_plan_returns_400_if_test_plan_already_deleted(self) -> None:
+        """
+        Тест-кейс, что метод возвращает 400, если тест-план уже удален.
+        :return: None
+        """
+        self.unsuccessful_data = {
+            "test_plan": {
+                "test_plan_id": 15
+            }
+        }
+        self.unsuccessful_delete_test_plan = requests.delete(
+            "http://127.0.0.1:8000/api/testplan/delete/",
+            headers=self.headers_auth,
+            auth=BearerAuth(token=self.token),
+            json=self.unsuccessful_data,
+            timeout=10
+        )
+        self.assertEqual(self.unsuccessful_delete_test_plan.status_code, 400)
+        self.assertEqual(
+            self.unsuccessful_delete_test_plan.json()["test_plan"]["errors"]["error"][0],
+            "No such test plan")
+
+    def test_delete_test_plan_returns_400_if_test_plan_not_found(self) -> None:
+        """
+        Тест-кейс, что метод возвращает 400, если тест-плана нет в БД
+        :return: None
+        """
+        self.unsuccessful_data = {
+            "test_plan": {
+                "test_plan_id": 0
+            }
+        }
+        self.unsuccessful_delete_test_plan = requests.delete(
+            "http://127.0.0.1:8000/api/testplan/delete/",
+            headers=self.headers_auth,
+            auth=BearerAuth(token=self.token),
+            json=self.unsuccessful_data,
+            timeout=10
+        )
+        self.assertEqual(self.unsuccessful_delete_test_plan.status_code, 400)
+        self.assertEqual(
+            self.unsuccessful_delete_test_plan.json()["test_plan"]["errors"]["error"][0],
+            "No such test plan")
+
+    def test_delete_test_plan_returns_400_if_no_id(self) -> None:
+        """
+        Тест-кейс, что метод удаления тест-плана возвращает 400,
+        если не указан ID тест-плана.
+        :return: None
+        """
+        self.unsuccessful_data = {
+            "test_plan": {
+                "test_plan_id": None
+            }
+        }
+        self.unsuccessful_delete_test_plan = requests.delete(
+            "http://127.0.0.1:8000/api/testplan/delete/",
+            headers=self.headers_auth,
+            auth=BearerAuth(token=self.token),
+            json=self.unsuccessful_data,
+            timeout=10
+        )
+        self.assertEqual(self.unsuccessful_delete_test_plan.status_code, 400)
+        self.assertEqual(
+            self.unsuccessful_delete_test_plan.json()["test_plan"]["errors"]["test_plan_id"][0],
+            "ID is required")
+
+        self.unsuccessful_data = {
+            "test_plan": {
+                "test_plan_id": ""
+            }
+        }
+        self.unsuccessful_delete_test_plan = requests.delete(
+            "http://127.0.0.1:8000/api/testplan/delete/",
+            headers=self.headers_auth,
+            auth=BearerAuth(token=self.token),
+            json=self.unsuccessful_data,
+            timeout=10
+        )
+        self.assertEqual(self.unsuccessful_delete_test_plan.status_code, 400)
+        self.assertEqual(
+            self.unsuccessful_delete_test_plan.json()["test_plan"]["errors"]["test_plan_id"][0],
+            "A valid integer is required.")
+
+    def test_delete_test_plan_returns_403_if_unauthorized(self) -> None:
+        """
+        Тест-кейс, что метод возвращает 403, если пользователь не авторизован.
+        :return: None
+        """
+        self.successful_data = {
+            "test_plan": {
+                "test_plan_id": 10
+            }
+        }
+        self.successful_delete_test_plan = requests.delete(
+            "http://127.0.0.1:8000/api/testplan/delete/",
+            json=self.successful_data,
+            timeout=10
+        )
+        self.assertEqual(self.successful_delete_test_plan.status_code, 403)
+        self.assertEqual(
+            self.successful_delete_test_plan.json()["test_plan"]["detail"],
+            "Authentication credentials were not provided.")
+
+    def test_delete_test_plan_returns_403_if_token_expired(self) -> None:
+        """
+        Тест-кейс, что метод возвращает 403, если токен просрочен.
+        :return: None
+        """
+        with open('./expired_token.txt', encoding='utf-8') as file:
+            self.expired_token = file.read()
+        self.successful_data = {
+            "test_plan": {
+                "test_plan_id": 2
+            }
+        }
+        self.successful_delete_test_plan = requests.delete(
+            "http://127.0.0.1:8000/api/testplan/delete/",
+            headers=self.headers_auth,
+            auth=BearerAuth(token=self.expired_token),
+            json=self.successful_data,
+            timeout=10
+        )
+        self.assertEqual(self.successful_delete_test_plan.status_code, 403)
+        self.assertEqual(
+            self.successful_delete_test_plan.json()["test_plan"]["detail"],
+            "Token has expired")

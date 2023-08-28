@@ -3,6 +3,7 @@
 Здесь собраны все API-представления проекта ThanQA.
 """
 import typing
+from django.utils import timezone
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -11,7 +12,8 @@ from rest_framework.views import APIView
 
 from authentication.models import User
 from testware.models import TestPlan
-from .serializers import LoginSerializer, CreateTestPlanSerializer, UpdateTestPlanSerializer
+from .serializers import LoginSerializer, CreateTestPlanSerializer, \
+    UpdateTestPlanSerializer, DeleteTestPlanSerializer
 from .renderers import UserJSONRenderer, TestPlanJSONRenderer
 
 
@@ -144,3 +146,27 @@ class UpdateTestPlanApiView(APIView):
             test_plan.save()
             return Response(data=serializer.data, status=status.HTTP_200_OK)
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class DeleteTestPlanApiView(APIView):
+    """
+    Метод удаления тест-плана
+    """
+    permission_classes: typing.ClassVar[tuple] = (IsAuthenticated,)
+    renderer_classes: typing.ClassVar[tuple] = (TestPlanJSONRenderer,)
+    serializer_class: typing.Any = DeleteTestPlanSerializer
+
+    def delete(self, request: Request) -> Response:
+        """
+        DELETE-запрос удаления тест-плана
+        :param request: Request
+        :return: Response
+        """
+        test_plan_data: typing.Any = request.data.get("test_plan", {})
+        serializer: DeleteTestPlanSerializer = self.serializer_class(data=test_plan_data)
+        if serializer.is_valid(raise_exception=True):
+            test_plan: TestPlan = TestPlan.objects.get(id=test_plan_data["test_plan_id"])
+            test_plan.deleted = timezone.now()
+            test_plan.save()
+            return Response(data=serializer.data, status=status.HTTP_200_OK)
+        return Response(data=serializer.data, status=status.HTTP_400_BAD_REQUEST)

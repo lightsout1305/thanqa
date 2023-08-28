@@ -226,3 +226,39 @@ class UpdateTestPlanSerializer(serializers.Serializer):
 
     def update(self, instance, validated_data) -> typing.Any:
         pass
+
+
+class DeleteTestPlanSerializer(serializers.Serializer):
+    """
+    Сериализация метода удаления тест-плана
+    """
+    test_plan_id: serializers.IntegerField = serializers.IntegerField(
+        required=True,
+        error_messages={"blank": "ID is required",
+                        "null": "ID is required"}
+    )
+
+    def validate(self, attrs: typing.Any) -> dict:
+        """
+        Валидация данных для удаления тест-плана
+        :param attrs: Any
+        :return: dict
+        """
+        test_plan_id: int = attrs.get("test_plan_id")
+        test_plans: typing.Any = \
+            list(TestPlan.objects.filter(deleted=None).values_list('id', flat=True))
+
+        if test_plan_id not in test_plans:
+            raise serializers.ValidationError(
+                "No such test plan"
+            )
+
+        return {
+            "test_plan_id": test_plan_id
+        }
+
+    def create(self, validated_data) -> typing.Any:
+        pass
+
+    def update(self, instance, validated_data) -> typing.Any:
+        pass
