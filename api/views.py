@@ -89,6 +89,12 @@ class CreateTestPlanAPIView(APIView):
                 end_date=end_date
             )
             test_plan.save()
+            if is_current:
+                test_plan.is_current = is_current
+                test_plans = TestPlan.objects.exclude(id=test_plan.id)
+                for obj in test_plans:
+                    obj.is_current = False
+                    obj.save()
             return Response(data=serializer.data, status=status.HTTP_200_OK)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
@@ -142,6 +148,11 @@ class UpdateTestPlanApiView(APIView):
             test_plan.start_date = start_date
             test_plan.end_date = end_date
             test_plan.author = User.objects.get(id=author) if author else None
+            if is_current:
+                test_plans = TestPlan.objects.exclude(id=test_plan_data["test_plan_id"])
+                for obj in test_plans:
+                    obj.is_current = False
+                    obj.save()
             test_plan.is_current = is_current
             test_plan.save()
             return Response(data=serializer.data, status=status.HTTP_200_OK)
@@ -167,6 +178,40 @@ class DeleteTestPlanApiView(APIView):
         if serializer.is_valid(raise_exception=True):
             test_plan: TestPlan = TestPlan.objects.get(id=test_plan_data["test_plan_id"])
             test_plan.deleted = timezone.now()
+            test_plan.is_current = False
             test_plan.save()
             return Response(data=serializer.data, status=status.HTTP_200_OK)
         return Response(data=serializer.data, status=status.HTTP_400_BAD_REQUEST)
+
+
+class GetTestPlanView(APIView):
+    """
+    Метод извлечения текущего тест-плана
+    """
+    permission_classes: typing.ClassVar[tuple] = (IsAuthenticated,)
+    renderer_classes: typing.ClassVar[tuple] = (TestPlanJSONRenderer,)
+
+    def get(self, request: Request) -> Response:
+        """
+        GET-запрос извлечения 1 тест-плана
+        :param request: Request
+        :return: Response
+        """
+        data: dict
+        try:
+            test_plan: TestPlan = TestPlan.objects.get(is_current=True, deleted=None)
+            data = {
+                "test_plan_id": test_plan.id,
+                "title": test_plan.title,
+                "description": test_plan.description,
+                "start_date": test_plan.start_date.isoformat(),
+                "end_date": test_plan.end_date.isoformat(),
+                "author": test_plan.author.id,
+                "is_current": test_plan.is_current
+            }
+            return Response(data=data, status=status.HTTP_200_OK)
+        except TestPlan.DoesNotExist:
+            data = {
+                "data": None
+            }
+            return Response(data=data, status=status.HTTP_200_OK)
