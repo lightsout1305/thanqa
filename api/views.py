@@ -3,17 +3,20 @@
 Здесь собраны все API-представления проекта ThanQA.
 """
 import typing
+
+from django.db.models import QuerySet
 from django.utils import timezone
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework.views import APIView
+from rest_framework.generics import ListAPIView
 
 from authentication.models import User
 from testware.models import TestPlan
 from .serializers import LoginSerializer, CreateTestPlanSerializer, \
-    UpdateTestPlanSerializer, DeleteTestPlanSerializer
+    UpdateTestPlanSerializer, DeleteTestPlanSerializer, GetTestPlansSerializer
 from .renderers import UserJSONRenderer, TestPlanJSONRenderer
 
 
@@ -91,7 +94,8 @@ class CreateTestPlanAPIView(APIView):
             test_plan.save()
             if is_current:
                 test_plan.is_current = is_current
-                test_plans = TestPlan.objects.exclude(id=test_plan.id)
+                test_plans = TestPlan.objects.exclude(
+                    id=test_plan.id).filter(is_current=True, deleted=None)
                 for obj in test_plans:
                     obj.is_current = False
                     obj.save()
@@ -149,7 +153,10 @@ class UpdateTestPlanApiView(APIView):
             test_plan.end_date = end_date
             test_plan.author = User.objects.get(id=author) if author else None
             if is_current:
-                test_plans = TestPlan.objects.exclude(id=test_plan_data["test_plan_id"])
+                test_plans = TestPlan.objects.exclude(
+                    id=test_plan_data["test_plan_id"]).filter(
+                    is_current=True,
+                    deleted=None)
                 for obj in test_plans:
                     obj.is_current = False
                     obj.save()
@@ -215,3 +222,26 @@ class GetTestPlanView(APIView):
                 "data": None
             }
             return Response(data=data, status=status.HTTP_200_OK)
+
+
+class GetTestPlansAPIView(ListAPIView):
+    """
+    Метод извлечения всех тест-планов в алфавитном порядке
+    """
+    permission_classes: typing.ClassVar[tuple] = (IsAuthenticated,)
+    serializer_class = GetTestPlansSerializer
+    renderer_classes = (TestPlanJSONRenderer,)
+
+    def get_queryset(self) -> QuerySet[TestPlan]:
+        """
+        Извлечение всех тест-планов
+        :return:
+        """
+        queryset: QuerySet[TestPlan]
+        title: typing.Any = self.request.query_params.get("title")
+        if title is not None:
+            queryset = TestPlan.objects.filter(
+                deleted=None, title__icontains=title, is_current=False).order_by('id')
+        else:
+            queryset = TestPlan.objects.filter(deleted=None, is_current=False).order_by('id')
+        return queryset

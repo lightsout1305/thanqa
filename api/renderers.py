@@ -56,7 +56,7 @@ class TestPlanJSONRenderer(JSONRenderer):
         :param renderer_context: Any
         :return: str
         """
-        errors: typing.Any = data.get("errors", None)
+        errors = data.get("errors", None) if isinstance(data, dict) else data
 
         if errors is not None:
             JSONRenderer.render(self, data)

@@ -10,4 +10,5 @@ urlpatterns = [
     path("testplan/update/", views.UpdateTestPlanApiView.as_view(), name='update_test_plan'),
     path("testplan/delete/", views.DeleteTestPlanApiView.as_view(), name='delete_test_plan'),
     path("testplan/current/", views.GetTestPlanView.as_view(), name='current_test_plan'),
+    path("testplan/all/", views.GetTestPlansAPIView.as_view(), name='all_test_plans'),
 ]

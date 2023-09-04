@@ -7,12 +7,14 @@ from django.test import TestCase
 from requests import Response
 from requests.auth import AuthBase
 from thanqa_tms.settings import BASE_DIR
+from testware.models import TestPlan
 
 
 class BearerAuth(AuthBase):
     """
     Авторизация с помощью токена
     """
+
     # pylint: disable=too-few-public-methods
 
     def __init__(self, token):
@@ -619,7 +621,7 @@ class TestCreateTestPlan(TestCase):
             }
         }
         with open('./expired_token.txt', encoding='utf-8') as file:
-            self.expired_token = file.read()
+            self.expired_token: str = file.read()
         self.unsuccessful_create_test_plan = requests.post(
             'http://127.0.0.1:8000/api/testplan/create/',
             auth=BearerAuth(token=self.expired_token),
@@ -1370,3 +1372,286 @@ class TestDeleteTestPlan(TestCase):
         self.assertEqual(
             self.successful_delete_test_plan.json()["test_plan"]["detail"],
             "Token has expired")
+
+
+class TestGetCurrentTestPlan(TestCase):
+    """
+    Тестирование метода GetCurrentTestPlan
+    """
+    # pylint: disable=attribute-defined-outside-init
+    # pylint: disable=too-many-instance-attributes
+
+    env: environ.Env = environ.Env()
+    env.read_env(BASE_DIR, ".env")
+
+    def setUp(self) -> None:
+        """
+        Инициализация тестовых данных
+        :return: None
+        """
+        self.correct_email: str = self.env.str("MAIL")
+        self.correct_password: str = self.env.str("PASSWORD")
+        self.headers_auth = {"Authorization": "Bearer " + ""}
+        self.token: str = \
+            requests.post("http://127.0.0.1:8000/api/users/login/", json={
+                "user": {
+                    "email": self.correct_email,
+                    "password": self.correct_password
+                }
+            }, timeout=10).json()["user"]["token"]
+        self.successful_get_current_test_plan: Response
+        self.test_plan_id: int | float = 100
+        self.title: str = "Релиз-план 2023.16 по функционалу добавления/редактирования" \
+                          "/прочтения/удаления тест-плана"
+        with open('./description_for_test_plan.txt', encoding='utf-8') as file:
+            self.description = file.read()
+        self.author: int = 1
+        self.is_current: bool = True
+        self.testing_start_date: str = "2023-08-23T20:38:43.469088Z"
+        self.testing_end_date: str = "2023-08-30T20:38:43.469088Z"
+        self.wrong_testing_end_date: str = "2023-07-30T20:38:43.469088Z"
+
+    def test_get_current_test_plan_returns_200(self) -> None:
+        """
+        Тест-кейс, что метод текущего тест-плана возвращает 200,
+        с тест-планом.
+        :return: None
+        """
+        self.successful_get_current_test_plan = requests.get(
+            "http://127.0.0.1:8000/api/testplan/current/",
+            headers=self.headers_auth,
+            auth=BearerAuth(token=self.token),
+            timeout=10
+        )
+        self.assertEqual(self.successful_get_current_test_plan.status_code, 200)
+        self.assertEqual(
+            self.successful_get_current_test_plan.json()["test_plan"]["title"], self.title)
+        self.assertEqual(
+            self.successful_get_current_test_plan.json()["test_plan"]["description"],
+            self.description
+        )
+        self.assertEqual(
+            self.successful_get_current_test_plan.json()["test_plan"]["is_current"],
+            self.is_current
+        )
+        self.assertEqual(
+            self.successful_get_current_test_plan.json()["test_plan"]["author"], self.author
+        )
+
+    def test_get_current_test_plan_returns_200_if_no_test_plan(self) -> None:
+        """
+        Тест-кейс, что метод возвращения текущего тест-плана возвращает пустую
+        информацию
+        :return: None
+        """
+        self.current_test_plan_id: int = requests.get(
+            "http://127.0.0.1:8000/api/testplan/current/",
+            headers=self.headers_auth,
+            auth=BearerAuth(token=self.token),
+            timeout=10
+        ).json()["test_plan"]["test_plan_id"]
+        self.successful_data = {
+            "test_plan": {
+                "test_plan_id": self.current_test_plan_id
+            }
+        }
+        self.delete_test_plan: Response = requests.delete(
+            "http://127.0.0.1:8000/api/testplan/delete/",
+            auth=BearerAuth(token=self.token),
+            headers=self.headers_auth,
+            json=self.successful_data,
+            timeout=10
+        )
+        self.successful_get_current_test_plan = requests.get(
+            "http://127.0.0.1:8000/api/testplan/current/",
+            auth=BearerAuth(token=self.token),
+            headers=self.headers_auth,
+            timeout=10
+        )
+        self.assertEqual(self.successful_get_current_test_plan.status_code, 200)
+        self.assertIsNone(self.successful_get_current_test_plan.json()["test_plan"]["data"])
+
+    def test_get_current_test_plan_returns_403_if_unauthorized(self) -> None:
+        """
+        Тест-кейс, что метод возвращает 403, если пользователь не авторизован.
+        :return: None
+        """
+        self.successful_get_current_test_plan = requests.get(
+            "http://127.0.0.1:8000/api/testplan/current",
+            headers=self.headers_auth,
+            timeout=10
+        )
+        self.assertEqual(self.successful_get_current_test_plan.status_code, 403)
+        self.assertEqual(
+            self.successful_get_current_test_plan.json()["test_plan"]["detail"],
+            "Authentication credentials were not provided."
+        )
+
+    def test_get_current_test_plan_returns_403_if_token_expired(self) -> None:
+        """
+        Тест-кейс, что метод возвращает 403, если токен просрочен.
+        :return: None
+        """
+        with open('./expired_token.txt', encoding='utf-8') as file:
+            self.expired_token: str = file.read()
+        self.successful_get_current_test_plan = requests.get(
+            "http://127.0.0.1:8000/api/testplan/current",
+            headers=self.headers_auth,
+            auth=BearerAuth(token=self.expired_token),
+            timeout=10
+        )
+        self.assertEqual(self.successful_get_current_test_plan.status_code, 403)
+        self.assertEqual(
+            self.successful_get_current_test_plan.json()["test_plan"]["detail"],
+            "Token has expired")
+
+
+class TestGetTestPlans(TestCase):
+    """
+    Тестирование метода GetTestPlans
+    """
+
+    env: environ.Env = environ.Env()
+    env.read_env(BASE_DIR, ".env")
+
+    count_from_db: int = TestPlan.objects.filter(deleted=None, is_current=False).count()
+
+    # pylint: disable=too-many-lines
+    # pylint: disable=attribute-defined-outside-init
+
+    def setUp(self) -> None:
+        """
+        Инициализация тестовых данных
+        :return: None
+        """
+        self.correct_email: str = self.env.str("MAIL")
+        self.correct_password: str = self.env.str("PASSWORD")
+        self.headers_auth = {"Authorization": "Bearer " + ""}
+        self.token: str = \
+            requests.post("http://127.0.0.1:8000/api/users/login/", json={
+                "user": {
+                    "email": self.correct_email,
+                    "password": self.correct_password
+                }
+            }, timeout=10).json()["user"]["token"]
+        self.successful_get_test_plans: Response
+        self.unsuccessful_get_test_plans: Response
+
+    def test_get_test_plans_returns_200(self) -> None:
+        """
+        Тест-кейс, что метод возвращения тест-планов возвращает 200
+        со всеми тест-планами
+        :return: None
+        """
+        count_from_api: int = 0
+        self.successful_get_test_plans = requests.get(
+            "http://127.0.0.1:8000/api/testplan/all/",
+            auth=BearerAuth(token=self.token),
+            headers=self.headers_auth,
+            timeout=10
+        )
+
+        try:
+            while True:
+                _ = self.successful_get_test_plans.json()["test_plan"][count_from_api]
+                count_from_api += 1
+        except IndexError:
+            count_from_api -= 1
+        self.assertEqual(self.successful_get_test_plans.status_code, 200)
+        self.assertEqual(self.count_from_db, count_from_api)
+
+    def test_get_test_plans_returns_ordered_objects(self) -> None:
+        """
+        Тест-кейс, что метод возвращения тест-плана возвращает отсортированный по ID список
+        :return: None
+        """
+        self.successful_get_test_plans = requests.get(
+            "http://127.0.0.1:8000/api/testplan/all/",
+            auth=BearerAuth(token=self.token),
+            headers=self.headers_auth,
+            timeout=10
+        )
+
+        for i in range(1, self.count_from_db):
+            current_id: int = self.successful_get_test_plans.json()["test_plan"][i]["id"]
+            previous_id: int = self.successful_get_test_plans.json()['test_plan'][i - 1]["id"]
+            if current_id <= previous_id:
+                raise ValueError("Некорректная сортировка по ID")
+
+    def test_get_test_plans_returns_search_results(self) -> None:
+        """
+        Тест-кейс, что метод возвращения тест-планов находит тест-план
+        по строке поиска
+        :return: None
+        """
+        count_from_api: int = 0
+        self.successful_get_test_plans = requests.get(
+            "http://127.0.0.1:8000/api/testplan/all?title=this",
+            auth=BearerAuth(token=self.token),
+            headers=self.headers_auth,
+            timeout=10
+        )
+        try:
+            while True:
+                _ = self.successful_get_test_plans.json()["test_plan"][count_from_api]
+                count_from_api += 1
+                self.assertRegex(
+                    self.successful_get_test_plans.json()['test_plan'][count_from_api]['title'],
+                    "(?i)this")
+        except IndexError:
+            count_from_api -= 1
+
+        for i in range(1, count_from_api):
+            current_id: int = self.successful_get_test_plans.json()["test_plan"][i]["id"]
+            previous_id: int = self.successful_get_test_plans.json()['test_plan'][i - 1]["id"]
+            if current_id <= previous_id:
+                raise ValueError("Некорректная сортировка по ID")
+
+    def test_get_test_plans_returns_200_if_no_data_found(self) -> None:
+        """
+        Тест-кейс, что метод возвращения тест-планов возвращает пустой массив
+        :return: None
+        """
+        self.successful_get_test_plans = requests.get(
+            "http://127.0.0.1:8000/api/testplan/all?title=lol",
+            auth=BearerAuth(token=self.token),
+            headers=self.headers_auth,
+            timeout=10
+        )
+        self.assertEqual(self.successful_get_test_plans.status_code, 200)
+        self.assertFalse(self.successful_get_test_plans.json()['test_plan'])
+
+    def test_get_test_plans_returns_403_if_unauthorized(self) -> None:
+        """
+        Тест-кейс, что метод возвращает 403, если пользователь неавторизован
+        :return: None
+        """
+        self.unsuccessful_get_test_plans = requests.get(
+            "http://127.0.0.1:8000/api/testplan/all/",
+            headers=self.headers_auth,
+            timeout=10
+        )
+        self.assertEqual(self.unsuccessful_get_test_plans.status_code, 403)
+        self.assertEqual(
+            self.unsuccessful_get_test_plans.json()["test_plan"]["detail"],
+            "Authentication credentials were not provided."
+        )
+
+    def test_get_test_plans_returns_403_if_expired_token(self) -> None:
+        """
+        Тест-кейс, что метод возвращает 403, если токен просрочен
+        :return: None
+        """
+        with open('./expired_token.txt', encoding='utf-8') as file:
+            self.expired_token: str = file.read()
+        self.unsuccessful_get_test_plans = requests.get(
+            "http://127.0.0.1:8000/api/testplan/all/",
+            auth=BearerAuth(token=self.expired_token),
+            headers=self.headers_auth,
+            timeout=10
+        )
+        self.assertEqual(self.unsuccessful_get_test_plans.status_code, 403)
+        self.assertEqual(
+            self.unsuccessful_get_test_plans.json()["test_plan"]["detail"],
+            "Token has expired"
+        )

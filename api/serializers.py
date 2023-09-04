@@ -2,8 +2,10 @@
 Сериализаиия методов приложения api
 """
 import typing
-from rest_framework import serializers
+
+from django.db.models import Model
 from django.contrib.auth import authenticate
+from rest_framework import serializers
 from authentication.models import User
 from testware.models import TestPlan
 
@@ -262,3 +264,13 @@ class DeleteTestPlanSerializer(serializers.Serializer):
 
     def update(self, instance, validated_data) -> typing.Any:
         pass
+
+
+class GetTestPlansSerializer(serializers.ModelSerializer):
+    """
+    Сериализация метода GetTestPlans
+    """
+
+    class Meta:
+        model: typing.ClassVar[Model] = TestPlan
+        exclude = ('created', 'modified', 'deleted',)
