@@ -1,0 +1,91 @@
+.thanqa-sidebar {
+    width: 131px;
+    height: 810px;
+    flex-shrink: 0;
+    border-radius: 24px;
+    background: #000;
+    left: 2%;
+    position: absolute;
+    top: 5%;
+    filter: drop-shadow(20px 20px 40px rgba(0, 0, 0, 0.37));
+}
+
+.thanqa-sidebar-icon {
+    width: 88px;
+    height: 81px;
+    flex-shrink: 0;
+    background: url("../icons/icon-0.svg");
+    position: relative;
+    left: 16%;
+    top: 6%;
+}
+
+.thanqa-home-icon {
+    width: 53px;
+    height: 55px;
+    flex-shrink: 0;
+    background: url("../icons/Home_fill.svg");
+    position: relative;
+    left: 30%;
+    top: 12%;
+}
+
+.thanqa-user-icon-initial {
+    width: 46px;
+    height: 46px;
+    flex-shrink: 0;
+    background: url("../icons/User_alt.svg");
+    position: relative;
+    left: 33%;
+    top: 18%;
+}
+
+.thanqa-user-icon-on-hover {
+    width: 46px;
+    height: 46px;
+    flex-shrink: 0;
+    background: url("../icons/User_alt_1.svg");
+    position: relative;
+    left: 33%;
+    top: 18%;
+}
+
+.thanqa-settings-icon-initial {
+    width: 37px;
+    height: 40px;
+    flex-shrink: 0;
+    background: url("../icons/Setting_line.svg");
+    position: relative;
+    left: 36%;
+    top: 25%;
+}
+
+.thanqa-settings-icon-on-hover {
+    width: 37px;
+    height: 40px;
+    flex-shrink: 0;
+    background: url("../icons/Setting_line_1.svg");
+    position: relative;
+    left: 36%;
+    top: 25%;
+}
+
+.thanqa-exit-icon-initial {
+    width: 63px;
+    height: 65px;
+    flex-shrink: 0;
+    background: url("../icons/Sign_in_squre.svg");
+    position: relative;
+    left: 25%;
+    top: 50%;
+}
+
+.thanqa-exit-icon-on-hover {
+    width: 63px;
+    height: 65px;
+    flex-shrink: 0;
+    background: url("../icons/Sign_in_squre_1.svg");
+    position: relative;
+    left: 25%;
+    top: 50%;
+}

@@ -1,6 +1,8 @@
+import Sidebar from "../sidebar/Sidebar";
+
 function ThanQA() {
     return (
-        <h1>ThanQA Main Page</h1>
+        <Sidebar/>
     )
 }
 

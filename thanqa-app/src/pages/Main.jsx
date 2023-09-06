@@ -1,10 +1,10 @@
 import React from "react";
-import ThanQA from "../components/main/ThanQA";
+import Sidebar from "../components/sidebar/Sidebar";
 
 function Main() {
     return (
         <div className="main">
-            <ThanQA/>
+            <Sidebar/>
         </div>
     )
 }
