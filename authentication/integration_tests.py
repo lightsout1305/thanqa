@@ -76,7 +76,7 @@ class AuthPageTestCase(BaseTestCase):
         )
 
         # Проверка, что текст отображается, а значит пользователь авторизован
-        self.assertEqual(thanqa_title.text, "ThanQA Main Page")
+        self.assertEqual(thanqa_title.text, "TestCasesTable Main Page")
 
     def invalid_login_or_password(self) -> None:
         """

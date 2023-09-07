@@ -1,0 +1,86 @@
+.thanqa-test-cases {
+    width: 829px;
+    height: 800px;
+    flex-shrink: 0;
+    position: absolute;
+    left: 15%;
+    top: 4.5%;
+    margin: 0 0 0 0;
+}
+
+.thanqa-add-test-case-icon-initial {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    background: url("../icons/Add_square.svg");
+    margin: 0 0 0 0;
+    display: inline-block;
+    position: relative;
+    top: 0.5%;
+    left: 1%;
+}
+
+.thanqa-add-test-case-icon-on-hover {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    background: url("../icons/Add_square_on_hover.svg");
+    margin: 0 0 0 0;
+    display: inline-block;
+    position: relative;
+    top: 0.5%;
+    left: 1%;
+}
+
+.thanqa-search {
+    width: 655px;
+    height: 40px;
+    flex-shrink: 0;
+    font-family: Roboto, Roboto, serif;
+    border-radius: 8px;
+    background: #F5F5F7;
+    display: inline-block;
+    position: relative;
+    left: 5%;
+}
+
+.thanqa-search-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    background: url("../icons/Group 35.svg");
+    display: inline-block;
+    position: relative;
+    left: 3%;
+    top: 20%;
+}
+
+.thanqa-search-input {
+    width: 600px;
+    height: 35px;
+    flex-shrink: 0;
+    font-family: Roboto, Roboto, serif;
+    border-radius: 8px;
+    display: inline-block;
+    position: relative;
+    left: 150%;
+    bottom: 40%;
+    background: #F5F5F7;
+    border: none;
+    outline: none;
+    font-size: 20px;
+}
+
+.thanqa-no-test-runs-text {
+    color: #000;
+    font-family: Roboto, serif;
+    font-size: 33px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    position: relative;
+    left: 30%;
+    top: 7%;
+    margin: 0 0 0 0;
+    display: inline-block;
+}

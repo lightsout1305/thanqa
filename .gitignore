@@ -5,3 +5,4 @@ authentication/.mypy_cache
 api/.mypy_cache
 description_for_test_plan.txt
 expired_token.txt
+__pycache__

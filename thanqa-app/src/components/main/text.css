@@ -1,0 +1,14 @@
+.thanqa-text {
+    color: #000;
+    font-family: Baloo Bhai, serif;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin: 0 0 0 0;
+    display: inline-block;
+}
+
+.thanqa-text-and-icon {
+    display: inline-block;
+}

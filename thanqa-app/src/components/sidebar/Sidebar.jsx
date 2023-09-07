@@ -1,6 +1,9 @@
 import "./sidebar.css";
+import { useNavigate } from "react-router-dom";
 
 function Sidebar() {
+
+    const navigate = useNavigate();
 
     const changeUserIconOnMoveIn = (event) => {
         if (window.location.href.includes('main')) {
@@ -34,21 +37,30 @@ function Sidebar() {
         event.target.className = 'thanqa-exit-icon-initial';
     };
 
+    const getUnauthorized = (event) => {
+        localStorage.removeItem('auth');
+        navigate('/login/');
+    }
+
     return (
         <div className="thanqa-sidebar">
             <div className="thanqa-sidebar-icon"/>
             <div className="thanqa-home-icon"/>
-            <div className="thanqa-user-icon-initial"
-                 onMouseMove={changeUserIconOnMoveIn}
-                 onMouseLeave={changeUserIconOnMoveOut}
+            <div
+                className="thanqa-user-icon-initial"
+                onMouseMove={changeUserIconOnMoveIn}
+                onMouseLeave={changeUserIconOnMoveOut}
             />
-            <div className="thanqa-settings-icon-initial"
-                 onMouseMove={changeSettingsIconOnMoveIn}
-                 onMouseLeave={changeSettingsIconOnMoveOut}
+            <div
+                className="thanqa-settings-icon-initial"
+                onMouseMove={changeSettingsIconOnMoveIn}
+                onMouseLeave={changeSettingsIconOnMoveOut}
             />
-            <div className="thanqa-exit-icon-initial"
-                 onMouseMove={changeExitIconOnMoveIn}
-                 onMouseLeave={changeExitIconOnMoveOut}
+            <div
+                className="thanqa-exit-icon-initial"
+                onMouseMove={changeExitIconOnMoveIn}
+                onMouseLeave={changeExitIconOnMoveOut}
+                onClick={getUnauthorized}
             />
         </div>
     )
