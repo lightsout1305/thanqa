@@ -147,15 +147,21 @@ function LoginForm() {
                     navigate("/main/");
                 })
                 .catch((err) => {
-                    if (err.response.data["user"]["errors"]["email"]) {
+                    if (err.response) {
+                        if (err.response.data["user"]["errors"]["email"]) {
                         showNotification("error", err.response.data["user"]["errors"]["email"]);
-                    }
-                    else if (err.response.data["user"]["errors"]["password"]) {
-                        showNotification("error", err.response.data["user"]["errors"]["password"]);
+                        }
+                        else if (err.response.data["user"]["errors"]["password"]) {
+                            showNotification("error", err.response.data["user"]["errors"]["password"]);
+                        }
+                        else {
+                            showNotification("error", err.response.data["user"]["errors"]["error"]);
+                        }
                     }
                     else {
-                        showNotification("error", err.response.data["user"]["errors"]["error"]);
+                        showNotification('error', "Server Error")
                     }
+
                 });
             }
     }

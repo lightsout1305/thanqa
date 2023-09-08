@@ -1,4 +1,4 @@
-import './text.css';
+import './main.css';
 
 export const Text = ({title}) => {
     return (

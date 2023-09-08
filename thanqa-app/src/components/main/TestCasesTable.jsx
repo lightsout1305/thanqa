@@ -2,6 +2,8 @@ import './main.css';
 import {Text} from "./Text";
 import {Search} from "./Search";
 import {NoContentText} from "./NoContentText";
+import {TestRunCounterTable} from "./TestRunCounterTable";
+import {TestPlanSection} from "./TestPlanSection";
 
 function TestCasesTable() {
 
@@ -23,6 +25,8 @@ function TestCasesTable() {
             />
             <Search id="searchInput" placeholder="Search test runs by title"/>
             <NoContentText text="No Test Runs Yet..."/>
+            <TestRunCounterTable/>
+            <TestPlanSection/>
         </div>
     )
 }

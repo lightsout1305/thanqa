@@ -80,7 +80,159 @@
     line-height: normal;
     position: relative;
     left: 30%;
-    top: 7%;
+    bottom: 15%;
     margin: 0 0 0 0;
     display: inline-block;
+}
+
+.thanqa-text {
+    color: #000;
+    font-family: Baloo Bhai, serif;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin: 0 0 0 0;
+    display: inline-block;
+}
+
+.thanqa-text-and-icon {
+    display: inline-block;
+}
+
+.thanqa-test-runs-counter-table {
+    width: 500px;
+    height: 250px;
+    margin: 0 0 0 0;
+    display: inline-block;
+    position: relative;
+    left: 90%;
+    bottom: 7%;
+}
+
+.thanqa-test-runs-form {
+    width: 208px;
+    height: 96px;
+    flex-shrink: 0;
+    border-radius: 14px;
+    background: #F5F5F7;
+    margin: 15px 15px 15px 15px;
+    display: inline-block;
+}
+
+.passed-thanqa-test-runs-counter {
+    color: #7FEE85;
+    font-family: Baloo Bhai, serif;
+    font-size: 64px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin: 0 0 0 0;
+    position: relative;
+    left: 15%;
+    display: inline-block;
+}
+
+
+.in-progress-thanqa-test-runs-counter {
+    color: #0B46F8;
+    font-family: Baloo Bhai, serif;
+    font-size: 64px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin: 0 0 0 0;
+    position: relative;
+    left: 15%;
+    display: inline-block;
+}
+
+.blocked-thanqa-test-runs-counter {
+    color: black;
+    font-family: Baloo Bhai, serif;
+    font-size: 64px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin: 0 0 0 0;
+    position: relative;
+    left: 15%;
+    display: inline-block;
+}
+
+.failed-thanqa-test-runs-counter {
+    color: #FF0505;
+    font-family: Baloo Bhai, serif;
+    font-size: 64px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin: 0 0 0 0;
+    position: relative;
+    left: 15%;
+    display: inline-block;
+}
+
+.thanqa-test-runs-counter-text {
+    color: #000;
+    font-family: Roboto, serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+    display: inline-block;
+    margin: 0 0 0 0;
+    width: 100px;
+    position: relative;
+    left: 25%;
+}
+
+.thanqa-current-test-plan {
+    width: 500px;
+    height: 250px;
+    margin: 0 0 0 0;
+    position: relative;
+    left: 125.5%;
+    bottom: 3%;
+}
+
+.thanqa-current-test-plan-short-info {
+    width: 445px;
+    height: 193px;
+    flex-shrink: 0;
+    border-radius: 14px;
+    background: #F5F5F7;
+    position: relative;
+    top: 10%;
+}
+
+.thanqa-test-plan-button {
+    width: 160px;
+    height: 59px;
+    flex-shrink: 0;
+    background: black;
+    border-radius: 8px;
+    color: #FFFFFF;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: Roboto, serif;
+    font-style: normal;
+    line-height: normal;
+    fill: rgba(0, 0, 0, 0.73);
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+    margin: 0 0 0 0;
+    position: relative;
+    top: 33%;
+    left: 10%;
+}
+
+.thanqa-test-plan-icon {
+    width: 122px;
+    height: 108px;
+    flex-shrink: 0;
+    background: url("../icons/Folder_file.svg");
+    margin: 0 0 0 0;
+    position: relative;
+    left: 65%;
+    bottom: 10%;
 }

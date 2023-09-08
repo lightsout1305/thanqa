@@ -72,11 +72,11 @@ class AuthPageTestCase(BaseTestCase):
 
         # Текст, который показывается на главной странице
         thanqa_title: typing.Any = self.driver.find_element(
-            By.TAG_NAME, 'h1'
+            By.CLASS_NAME, 'thanqa-text'
         )
 
         # Проверка, что текст отображается, а значит пользователь авторизован
-        self.assertEqual(thanqa_title.text, "TestCasesTable Main Page")
+        self.assertEqual(thanqa_title.text, "Test Runs")
 
     def invalid_login_or_password(self) -> None:
         """
