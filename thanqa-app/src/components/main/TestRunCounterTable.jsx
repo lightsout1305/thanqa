@@ -1,4 +1,4 @@
-export const TestRunCounterTable = () => {
+ export const TestRunCounterTable = () => {
     return (
         <div className="thanqa-test-runs-counter-table">
             <div className="thanqa-test-runs-form">

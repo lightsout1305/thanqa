@@ -2,11 +2,8 @@ import './main.css';
 import {Text} from "./Text";
 import {Search} from "./Search";
 import {NoContentText} from "./NoContentText";
-import {TestRunCounterTable} from "./TestRunCounterTable";
-import {TestPlanSection} from "./TestPlanSection";
 
-function TestCasesTable() {
-
+export const TestCasesTable = () => {
     const changeAddTestRunIconOnMoveIn = (event) => {
         event.target.className = 'thanqa-add-test-case-icon-on-hover';
     };
@@ -25,10 +22,6 @@ function TestCasesTable() {
             />
             <Search id="searchInput" placeholder="Search test runs by title"/>
             <NoContentText text="No Test Runs Yet..."/>
-            <TestRunCounterTable/>
-            <TestPlanSection/>
         </div>
     )
 }
-
-export default TestCasesTable;

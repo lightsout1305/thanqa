@@ -105,9 +105,9 @@
     height: 250px;
     margin: 0 0 0 0;
     display: inline-block;
-    position: relative;
-    left: 90%;
-    bottom: 7%;
+    position: absolute;
+    left: 69.5%;
+    top: 3%;
 }
 
 .thanqa-test-runs-form {
@@ -191,9 +191,9 @@
     width: 500px;
     height: 250px;
     margin: 0 0 0 0;
-    position: relative;
-    left: 125.5%;
-    bottom: 3%;
+    position: absolute;
+    left: 70.5%;
+    bottom: 40%;
 }
 
 .thanqa-current-test-plan-short-info {
@@ -206,7 +206,7 @@
     top: 10%;
 }
 
-.thanqa-test-plan-button {
+.thanqa-test-plan-button-no-current-test-plan {
     width: 160px;
     height: 59px;
     flex-shrink: 0;
@@ -235,4 +235,255 @@
     position: relative;
     left: 65%;
     bottom: 10%;
+}
+
+.thanqa-test-plan-datetime {
+    color: #000;
+    font-family: Roboto, sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 580;
+    line-height: 24px;
+    margin: 0 0 0 0;
+    display: block;
+    position: relative;
+    top: 15%;
+    left: 5%;
+}
+
+.thanqa-test-plan-title {
+    color: #000;
+    font-family: Baloo Bhai, serif;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin: 0 0 0 0;
+    display: inline-block;
+    position: relative;
+    top: 15%;
+    left: 5%;
+}
+
+.thanqa-test-plan-button-with-current-test-plan {
+    width: 120px;
+    height: 40px;
+    flex-shrink: 0;
+    background: black;
+    border-radius: 8px;
+    color: #FFFFFF;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: Roboto, serif;
+    font-style: normal;
+    line-height: normal;
+    fill: rgba(0, 0, 0, 0.73);
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+    margin: 0 0 0 0;
+    position: relative;
+    top: 25%;
+    left: 5%;
+}
+
+.thanqa-create-test-plan {
+    width: 1362px;
+    height: 804px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    border: 5px solid #F5F5F5;
+    background: #F5F5F5;
+    box-shadow: -20px -20px 50px 0 rgba(0, 0, 0, 0.07), 20px 20px 50px 0 rgba(0, 0, 0, 0.07);
+    position: absolute;
+    right: 35%;
+    top: -170%;
+}
+
+.thanqa-modal-title-input {
+    width: 750px;
+    height: 68px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    background: #FFF;
+    border: none;
+    outline: none;
+    font-size: 20px;
+    display: inline-block;
+    font-family: Roboto, Roboto, serif;
+    position: relative;
+    top: 7%;
+    right: 13%;
+    padding-left: 5px;
+}
+
+.thanqa-modal-header {
+    color: #000;
+    font-family: Baloo Bhai, serif;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin: 0 0 0 0;
+    position: relative;
+    left: 40%;
+    bottom: 2%;
+    display: inline-block;
+}
+
+.thanqa-modal-input-title-description {
+    color: #000;
+    font-family: Inter, serif;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin: 0 0 0 0;
+    position: relative;
+    display: inline-block;
+    right: 10.5%;
+    top: 1%;
+}
+
+.thanqa-datepicker-input {
+    width: 300px;
+    height: 68px;
+    flex-shrink: 0;
+    border: none;
+    outline: none;
+    border-radius: 8px;
+    background: #FFF;
+    font-size: 20px;
+    font-family: Roboto, Roboto, serif;
+    position: relative;
+    display: inline-block;
+    left: 100%;
+    bottom: 23%;
+    padding: 0 0 0 0;
+}
+
+.thanqa-modal-datepicker-description {
+    color: #000;
+    font-family: Inter, serif;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin: 0 0 0 0;
+    position: relative;
+    display: inline-block;
+    right: 5.5%;
+    top: 1%;
+}
+
+.thanqa-datepicker-icon {
+    width: 50px;
+    height: 47px;
+    flex-shrink: 0;
+    background: url("../icons/Date_range.svg");
+    position: relative;
+    top: 15%;
+    left: 15%;
+}
+
+.thanqa-datepicker-background {
+    width: 80px;
+    height: 68px;
+    border-radius: 8px;
+    background: #FFF;
+    position: relative;
+    left: 68%;
+    bottom: 1.3%;
+}
+
+.thanqa-modal-content-description {
+    color: #000;
+    font-family: Inter, serif;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin: 0 0 0 0;
+    position: relative;
+    left: 5.5%;
+    top: 2%;
+}
+
+.thanqa-modal-content {
+    width: 1215px;
+    height: 431px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    background: #FFF;
+    border: none;
+    outline: none;
+    position: relative;
+    left: 5.2%;
+    top: 3%;
+    font-family: Roboto, serif;
+    font-size: 20px;
+    padding-left: 5px;
+    resize: none;
+}
+
+.thanqa-modal-author-description {
+    color: #000;
+    font-family: Inter, serif;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin: 0 0 0 0;
+    position: relative;
+    display: inline-block;
+    top: 8%;
+    right: 84%;
+}
+
+.thanqa-modal-author {
+    width: 366px;
+    height: 68px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    background: #FFF;
+    position: relative;
+    top: 9%;
+    left: 5.3%;
+    padding: 0 0 0 0;
+}
+
+.thanqa-modal-author-placeholder {
+    width: 300px;
+    height: 60px;
+    color: #919EAB;
+    font-family: Inter, serif;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    position: relative;
+    top: 30%;
+    padding-left: 5px;
+}
+
+.thanqa-close-modal {
+    width: 43px;
+    height: 43px;
+    flex-shrink: 0;
+    background: url("../icons/Dell_duotone.svg");
+    padding: 0 0 0 0;
+    position: relative;
+    display: inline-block;
+    left: 96%;
+    top: 1%;
+}
+
+.thanqa-close-modal-on-hover {
+    width: 43px;
+    height: 43px;
+    flex-shrink: 0;
+    background: url("../icons/Dell_duotone_hover.svg");
+    padding: 0 0 0 0;
+    position: relative;
+    display: inline-block;
+    left: 96%;
+    top: 1%;
 }
