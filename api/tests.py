@@ -6,6 +6,8 @@ import environ
 from django.test import TestCase
 from requests import Response
 from requests.auth import AuthBase
+
+from authentication.models import User
 from thanqa_tms.settings import BASE_DIR
 from testware.models import TestPlan
 
@@ -650,7 +652,7 @@ class TestUpdateTestPlan(TestCase):
         Инициализация тестовых данных
         :return: None
         """
-        self.test_plan_id: int | float = 100
+        self.test_plan_id: int
         self.title: str = "Релиз-план 2023.17 по функционалу добавления/редактирования" \
                           "/прочтения/удаления тест-плана"
         with open('./description_for_test_plan.txt', encoding='utf-8') as file:
@@ -682,6 +684,7 @@ class TestUpdateTestPlan(TestCase):
         и редактирует тест-план, если все поля введены.
         :return: None
         """
+        self.test_plan_id = int(input("Enter test-plan ID for update:\n"))
         self.successful_data = {
             "test_plan": {
                 "test_plan_id": self.test_plan_id,
@@ -724,6 +727,7 @@ class TestUpdateTestPlan(TestCase):
         и редактирует тест-план, если введен только заголовок.
         :return: None
         """
+        self.test_plan_id = int(input("Enter test-plan ID for update (only title):\n"))
         self.successful_data = {
             "test_plan": {
                 "test_plan_id": self.test_plan_id,
@@ -884,6 +888,7 @@ class TestUpdateTestPlan(TestCase):
         если нет названия тест-плана.
         :return: None
         """
+        self.test_plan_id = int(input("Enter test-plan ID for update (no title):\n"))
         self.unsuccessful_data = {
             "test_plan": {
                 "test_plan_id": self.test_plan_id,
@@ -954,6 +959,7 @@ class TestUpdateTestPlan(TestCase):
         если неверный формат даты.
         :return: None
         """
+        self.test_plan_id = int(input("Enter test-plan ID for update (wrong date format):\n"))
         self.unsuccessful_data_with_wrong_start_date_format: dict = {
             "test_plan": {
                 "test_plan_id": self.test_plan_id,
@@ -1040,6 +1046,7 @@ class TestUpdateTestPlan(TestCase):
         если дата конца тестирования меньше даты начала тестирования.
         :return: None
         """
+        self.test_plan_id = int(input("Enter test-plan ID for update(wrong date accordance):\n"))
         self.unsuccessful_data_less_end_date: dict = {
             "test_plan": {
                 "test_plan_id": self.test_plan_id,
@@ -1070,6 +1077,7 @@ class TestUpdateTestPlan(TestCase):
         если автора нет в БД или переданы неверные параметры
         :return: None
         """
+        self.test_plan_id = int(input("Enter test-plan ID for update (wrong author):\n"))
         self.unsuccessful_data_no_author_in_database: dict = {
             "test_plan": {
                 "test_plan_id": self.test_plan_id,
@@ -1147,6 +1155,7 @@ class TestUpdateTestPlan(TestCase):
         Тест-кейс, что метод возвращает 403, если пользователь не авторизован.
         :return: None
         """
+        self.test_plan_id = int(input("Enter test-plan ID for update (unauthorized):\n"))
         self.successful_data_with_only_title = {
             "test_plan": {
                 "test_plan_id": self.test_plan_id,
@@ -1170,6 +1179,7 @@ class TestUpdateTestPlan(TestCase):
         если JWT-токен просрочен.
         :return: None
         """
+        self.test_plan_id = int(input("Enter test-plan ID for update (expired token):\n"))
         self.successful_data_with_only_title = {
             "test_plan": {
                 "test_plan_id": self.test_plan_id,
@@ -1228,7 +1238,7 @@ class TestDeleteTestPlan(TestCase):
         если тест-план есть в БД и он не удален.
         :return: None
         """
-        self.test_plan_id = int(input("Enter test plan ID for deletion: "))
+        self.test_plan_id = int(input("Enter test plan ID for deletion:\n"))
         self.successful_data = {
             "test_plan": {
                 "test_plan_id": self.test_plan_id
@@ -1605,7 +1615,7 @@ class TestGetTestPlans(TestCase):
             current_id: int = self.successful_get_test_plans.json()["test_plan"][i]["id"]
             previous_id: int = self.successful_get_test_plans.json()['test_plan'][i - 1]["id"]
             if current_id <= previous_id:
-                raise ValueError("Некорректная сортировка по ID")
+                raise ValueError("Некорректная сортировка тест-планов по ID")
 
     def test_get_test_plans_returns_200_if_no_data_found(self) -> None:
         """
@@ -1653,5 +1663,157 @@ class TestGetTestPlans(TestCase):
         self.assertEqual(self.unsuccessful_get_test_plans.status_code, 403)
         self.assertEqual(
             self.unsuccessful_get_test_plans.json()["test_plan"]["detail"],
+            "Token has expired"
+        )
+
+
+class TestGetUsers(TestCase):
+    """
+    Тестирование метода GetUsers
+    """
+
+    # pylint: disable=attribute-defined-outside-init
+    # pylint: disable=too-many-instance-attributes
+
+    env: environ.Env = environ.Env()
+    env.read_env(BASE_DIR, ".env")
+
+    count_from_db: int = User.objects.filter(is_active=True, is_staff=True).count()
+
+    def setUp(self) -> None:
+        """
+        Инициализация тестовых данных
+        :return: None
+        """
+        self.correct_email: str = self.env.str("MAIL")
+        self.correct_password: str = self.env.str("PASSWORD")
+        self.headers_auth = {"Authorization": "Bearer " + ""}
+        self.token: str = \
+            requests.post("http://127.0.0.1:8000/api/users/login/", json={
+                "user": {
+                    "email": self.correct_email,
+                    "password": self.correct_password
+                }
+            }, timeout=10).json()["user"]["token"]
+        self.user_id: int = 1
+        self.first_name: str = "Dmitri"
+        self.last_name: str = "Plotnikov"
+        self.email: str = self.correct_email
+        self.successful_get_users: Response
+        self.unsuccessful_get_users: Response
+
+    def test_get_users_returns_200(self) -> None:
+        """
+        Тест-кейс, что метод возвращения пользователей возвращает 200
+        и список пользователей
+        :return: None
+        """
+        count_from_api: int = 0
+        self.successful_get_users = requests.get(
+            'http://127.0.0.1:8000/api/users/all/',
+            auth=BearerAuth(token=self.token),
+            headers=self.headers_auth,
+            timeout=10
+        )
+
+        try:
+            while True:
+                _ = self.successful_get_users.json()["users"][count_from_api]
+                count_from_api += 1
+        except IndexError:
+            count_from_api -= 1
+        self.assertEqual(self.successful_get_users.status_code, 200)
+        self.assertEqual(self.count_from_db, count_from_api)
+
+    def test_get_users_returns_necessary_data(self) -> None:
+        """
+        Тест-кейс, что метод возвращения пользователей возвращает
+        необходимые данные о пользователях
+        :return: None
+        """
+        self.successful_get_users = requests.get(
+            'http://127.0.0.1:8000/api/users/all/',
+            auth=BearerAuth(token=self.token),
+            headers=self.headers_auth,
+            timeout=10
+        )
+        self.assertEqual(
+            self.successful_get_users.json()["users"][0]["user_id"], self.user_id
+        )
+        self.assertIsInstance(
+            self.successful_get_users.json()["users"][0]["user_id"], int
+        )
+        self.assertEqual(
+            self.successful_get_users.json()["users"][0]["first_name"], self.first_name
+        )
+        self.assertIsInstance(
+            self.successful_get_users.json()["users"][0]["first_name"], str
+        )
+        self.assertEqual(
+            self.successful_get_users.json()["users"][0]["last_name"], self.last_name
+        )
+        self.assertIsInstance(
+            self.successful_get_users.json()["users"][0]["last_name"], str
+        )
+        self.assertEqual(
+            self.successful_get_users.json()["users"][0]["email"], self.email
+        )
+        self.assertIsInstance(
+            self.successful_get_users.json()["users"][0]["email"], str
+        )
+
+    def test_get_users_returns_ordered_objects(self) -> None:
+        """
+        Тест-кейс, что метод возвращения пользователей возвращает
+        отсортированный по ID список
+        :return: None
+        """
+        self.successful_get_users = requests.get(
+            "http://127.0.0.1:8000/api/users/all/",
+            auth=BearerAuth(token=self.token),
+            headers=self.headers_auth,
+            timeout=10
+        )
+
+        for i in range(1, self.count_from_db):
+            current_id: int = self.successful_get_users.json()["users"][i]["user_id"]
+            previous_id: int = self.successful_get_users.json()["users"][i - 1]["user_id"]
+            if current_id <= previous_id:
+                raise ValueError("Некорректная сортировка пользователей по ID")
+
+    def test_get_users_returns_403_if_unauthorized(self) -> None:
+        """
+        Тест-кейс, что метод возвращения пользователей возвращает 403,
+        если пользователь не авторизован
+        :return: None
+        """
+        self.unsuccessful_get_users = requests.get(
+            "http://127.0.0.1:8000/api/users/all/",
+            headers=self.headers_auth,
+            timeout=10
+        )
+        self.assertEqual(self.unsuccessful_get_users.status_code, 403)
+        self.assertEqual(
+            self.unsuccessful_get_users.json()["users"]["detail"],
+            "Authentication credentials were not provided."
+        )
+
+    def test_get_users_returns_403_if_token_expired(self) -> None:
+        """
+        Тест-кейс, что метод возвращения пользователей возвращает 403,
+        если токен просрочен
+        :return: None
+        """
+        with open('./expired_token.txt', encoding='utf-8') as file:
+            self.expired_token: str = file.read()
+        self.unsuccessful_get_users = requests.get(
+            "http://127.0.0.1:8000/api/users/all/",
+            auth=BearerAuth(token=self.expired_token),
+            headers=self.headers_auth,
+            timeout=10
+        )
+        self.assertEqual(self.unsuccessful_get_users.status_code, 403)
+        self.assertEqual(
+            self.unsuccessful_get_users.json()["users"]["detail"],
             "Token has expired"
         )
