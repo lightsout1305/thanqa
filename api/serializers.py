@@ -3,7 +3,6 @@
 """
 import typing
 
-from django.db.models import Model
 from django.contrib.auth import authenticate
 from rest_framework import serializers
 from authentication.models import User
@@ -272,5 +271,15 @@ class GetTestPlansSerializer(serializers.ModelSerializer):
     """
 
     class Meta:
-        model: typing.ClassVar[Model] = TestPlan
+        model = TestPlan
         exclude = ('created', 'modified', 'deleted',)
+
+
+class GetUsersSerializer(serializers.ModelSerializer):
+    """
+    Сериализация метода GetUsers
+    """
+
+    class Meta:
+        model = User
+        fields = ('id', 'first_name', 'last_name', 'email')

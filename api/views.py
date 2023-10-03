@@ -16,8 +16,8 @@ from rest_framework.generics import ListAPIView
 from authentication.models import User
 from testware.models import TestPlan
 from .serializers import LoginSerializer, CreateTestPlanSerializer, \
-    UpdateTestPlanSerializer, DeleteTestPlanSerializer, GetTestPlansSerializer
-from .renderers import UserJSONRenderer, TestPlanJSONRenderer
+    UpdateTestPlanSerializer, DeleteTestPlanSerializer, GetTestPlansSerializer, GetUsersSerializer
+from .renderers import LoginJSONRenderer, TestPlanJSONRenderer, UserJSONRenderer
 
 
 class LoginAPIView(APIView):
@@ -25,7 +25,7 @@ class LoginAPIView(APIView):
     Представление API авторизации
     """
     permission_classes: typing.ClassVar[tuple] = (AllowAny,)
-    renderer_classes: typing.ClassVar[tuple] = (UserJSONRenderer,)
+    renderer_classes: typing.ClassVar[tuple] = (LoginJSONRenderer,)
     serializer_class: typing.Any = LoginSerializer
 
     def post(self, request: Request) -> Response:
@@ -228,7 +228,7 @@ class GetTestPlansAPIView(ListAPIView):
     """
     Метод извлечения всех тест-планов в алфавитном порядке
     """
-    permission_classes: typing.ClassVar[tuple] = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
     serializer_class = GetTestPlansSerializer
     renderer_classes = (TestPlanJSONRenderer,)
 
@@ -245,3 +245,17 @@ class GetTestPlansAPIView(ListAPIView):
         else:
             queryset = TestPlan.objects.filter(deleted=None, is_current=False).order_by('id')
         return queryset
+
+
+class GetUsersAPIView(ListAPIView):
+    """
+    Метод извлечения списка пользователей.
+
+    Метод возвращает ID, имя, фамилию и email пользователя.
+
+    Метод возвращает список, отсортированный по ID по возрастанию
+    """
+    permission_classes = (IsAuthenticated,)
+    serializer_class = GetUsersSerializer
+    renderer_classes = (UserJSONRenderer,)
+    queryset = User.objects.filter(is_active=True, is_staff=True).order_by('id')

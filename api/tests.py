@@ -571,7 +571,7 @@ class TestCreateTestPlan(TestCase):
             "test_plan": {
                 "title": self.title,
                 "description": self.description,
-                "author": 2,
+                "author": 22,
                 "start_date": self.testing_start_date,
                 "end_date": self.testing_end_date,
                 "is_current": self.is_current
@@ -1131,7 +1131,7 @@ class TestUpdateTestPlan(TestCase):
                 "test_plan_id": self.test_plan_id,
                 "title": self.title,
                 "description": self.description,
-                "author": 2,
+                "author": 22,
                 "start_date": self.testing_start_date,
                 "end_date": self.testing_end_date,
                 "is_current": self.is_current
@@ -1607,7 +1607,7 @@ class TestGetTestPlans(TestCase):
                 count_from_api += 1
                 self.assertRegex(
                     self.successful_get_test_plans.json()['test_plan'][count_from_api]['title'],
-                    "(?i)this")
+                    "(?i)Релиз")
         except IndexError:
             count_from_api -= 1
 
@@ -1696,7 +1696,7 @@ class TestGetUsers(TestCase):
                 }
             }, timeout=10).json()["user"]["token"]
         self.user_id: int = 1
-        self.first_name: str = "Dmitri"
+        self.first_name: str = "Dmitrij"
         self.last_name: str = "Plotnikov"
         self.email: str = self.correct_email
         self.successful_get_users: Response
@@ -1721,7 +1721,7 @@ class TestGetUsers(TestCase):
                 _ = self.successful_get_users.json()["users"][count_from_api]
                 count_from_api += 1
         except IndexError:
-            count_from_api -= 1
+            pass
         self.assertEqual(self.successful_get_users.status_code, 200)
         self.assertEqual(self.count_from_db, count_from_api)
 
@@ -1738,10 +1738,10 @@ class TestGetUsers(TestCase):
             timeout=10
         )
         self.assertEqual(
-            self.successful_get_users.json()["users"][0]["user_id"], self.user_id
+            self.successful_get_users.json()["users"][0]["id"], self.user_id
         )
         self.assertIsInstance(
-            self.successful_get_users.json()["users"][0]["user_id"], int
+            self.successful_get_users.json()["users"][0]["id"], int
         )
         self.assertEqual(
             self.successful_get_users.json()["users"][0]["first_name"], self.first_name
@@ -1776,8 +1776,8 @@ class TestGetUsers(TestCase):
         )
 
         for i in range(1, self.count_from_db):
-            current_id: int = self.successful_get_users.json()["users"][i]["user_id"]
-            previous_id: int = self.successful_get_users.json()["users"][i - 1]["user_id"]
+            current_id: int = self.successful_get_users.json()["users"][i]["id"]
+            previous_id: int = self.successful_get_users.json()["users"][i - 1]["id"]
             if current_id <= previous_id:
                 raise ValueError("Некорректная сортировка пользователей по ID")
 

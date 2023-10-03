@@ -6,7 +6,7 @@ import typing
 from rest_framework.renderers import JSONRenderer
 
 
-class UserJSONRenderer(JSONRenderer):
+class LoginJSONRenderer(JSONRenderer):
     """
     Рендер JSON для модели User
     """
@@ -63,4 +63,32 @@ class TestPlanJSONRenderer(JSONRenderer):
 
         return json.dumps({
             "test_plan": data
+        })
+
+
+class UserJSONRenderer(JSONRenderer):
+    """
+    Рендер JSON для модели User
+    """
+    charset: str = "utf-8"
+
+    def render(
+            self,
+            data: typing.Any,
+            accepted_media_type: typing.Any = None,
+            renderer_context: typing.Any = None) -> str:
+        """
+        Функция рендера JSON модели User
+        :param data: Any
+        :param accepted_media_type: Any
+        :param renderer_context: Any
+        :return: str
+        """
+        errors: typing.Any = data.get("errors", None) if isinstance(data, dict) else data
+
+        if errors is not None:
+            JSONRenderer.render(self, data)
+
+        return json.dumps({
+            "users": data
         })
