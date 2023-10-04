@@ -487,3 +487,26 @@
     left: 96%;
     top: 1%;
 }
+
+.thanqa-checkbox {
+    width: 28px;
+    height: 28px;
+    border-radius: 14px;
+    position: relative;
+    left: 50%;
+    bottom: 0.5%;
+    display: inline-block;
+}
+
+.thanqa-modal-checkbox-text {
+    color: #000;
+    font-family: Inter, serif;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    position: relative;
+    left: 51%;
+    bottom: 1.5%;
+    display: inline-block;
+}

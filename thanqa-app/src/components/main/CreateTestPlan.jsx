@@ -1,4 +1,5 @@
 import './main.css';
+import {Checkbox} from "./Checkbox";
 
 export const CreateTestPlan = () => {
         const changeCloseIconColorOnMoveIn = (event) => {
@@ -58,6 +59,10 @@ export const CreateTestPlan = () => {
                                         Select author
                                 </span>
                         </div>
+                        <Checkbox/>
+                        <p className="thanqa-modal-checkbox-text">
+                            Choose this test-plan as current
+                        </p>
                 </div>
             </div>
         )
