@@ -355,8 +355,8 @@
     font-family: Roboto, Roboto, serif;
     position: relative;
     display: inline-block;
-    left: 100%;
-    bottom: 23%;
+    left: 19%;
+    bottom: 10px;
     padding: 0 0 0 0;
 }
 
@@ -509,4 +509,11 @@
     left: 51%;
     bottom: 1.5%;
     display: inline-block;
+}
+
+.thanqa-clear-datepicker-icon {
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+    background: url("../icons/Close_square.svg");
 }

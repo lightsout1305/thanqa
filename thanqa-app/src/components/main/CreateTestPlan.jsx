@@ -1,19 +1,33 @@
 import './main.css';
 import {Checkbox} from "./Checkbox";
+import {useState} from "react";
+import DatePicker, {registerLocale} from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import ru from 'date-fns/locale/ru';
+
+registerLocale('ru', ru);
 
 export const CreateTestPlan = () => {
         const changeCloseIconColorOnMoveIn = (event) => {
-                event.target.className = "thanqa-close-modal-on-hover";
+            event.target.className = "thanqa-close-modal-on-hover";
         }
         const changeCloseIconOnMoveOut = (event) => {
-                event.target.className = "thanqa-close-modal";
+            event.target.className = "thanqa-close-modal";
         }
         const closeModal = () => {
-                const parentComponent = document.getElementById('createTestPlan');
-                const modalWindow = document.getElementById('createTestPlanModal');
-                parentComponent.removeChild(modalWindow);
-
+            const parentComponent = document.getElementById('createTestPlan');
+            const modalWindow = document.getElementById('createTestPlanModal');
+            parentComponent.removeChild(modalWindow);
         }
+
+        const [startDate, setStartDate] = useState(new Date());
+        const [endDate, setEndDate] = useState(null);
+        const onChange = (dates) => {
+            const [start, end] = dates;
+            setStartDate(start);
+            setEndDate(end);
+        };
+
         return (
             <div id="createTestPlan">
                 <div id="createTestPlanModal"
@@ -38,9 +52,17 @@ export const CreateTestPlan = () => {
                     </p>
                     <div className="thanqa-datepicker-background">
                             <div className="thanqa-datepicker-icon">
-                                    <input
+                                    <DatePicker
                                         className="thanqa-datepicker-input"
-                                        placeholder="Select test plan date"
+                                        placeholderText="Select test plan date"
+                                        onChange={onChange}
+                                        selected={startDate}
+                                        startDate={startDate}
+                                        endDate={endDate}
+                                        selectsRange
+                                        showDisabledMonthNavigation
+                                        locale="ru"
+                                        dateFormat="dd.MM.yyyy"
                                     />
                             </div>
                     </div>
