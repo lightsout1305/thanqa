@@ -11,12 +11,30 @@ import {useEffect, useState} from "react";
 export const TestPlanSection = () => {
     const navigate = useNavigate();
     const [modal, openModal] = useState(false);
+    const token = JSON.parse(localStorage.getItem('auth')).token;
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    };
     const onClick = (event) => {
         openModal(true);
-        if (event.target.className === 'main') {
-            event.target.style.background = '#000';
+        const testButton = document.getElementById('testPlanButton');
+
+        if (testButton.textContent === 'Create Test Plan') {
+            axios
+                .get('http://127.0.0.1:8000/api/users/all/', config)
+                .then((res) => {
+
+                })
+                .catch((err) => {
+                    if (err.response) {
+                        showNotification('error', 'Server Error');
+                    }
+                })
         }
     }
+
     const onMouseUp = () => openModal(false);
     let modalWindow = null;
     function chooseModal(){
@@ -67,14 +85,6 @@ export const TestPlanSection = () => {
         }
         testPlanButton.textContent = buttonText;
 
-    };
-
-    const token = JSON.parse(localStorage.getItem('auth')).token;
-
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
     };
 
     useEffect(() => {

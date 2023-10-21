@@ -6,6 +6,8 @@
     left: 15%;
     top: 4.5%;
     margin: 0 0 0 0;
+    max-width: 100%;
+    max-height: 100%;
 }
 
 .thanqa-add-test-case-icon-initial {
@@ -42,6 +44,8 @@
     display: inline-block;
     position: relative;
     left: 5%;
+    max-width: 100%;
+    max-height: 100%;
 }
 
 .thanqa-search-icon {
@@ -80,7 +84,7 @@
     line-height: normal;
     position: relative;
     left: 30%;
-    bottom: 15%;
+    top: 5%;
     margin: 0 0 0 0;
     display: inline-block;
 }
@@ -108,6 +112,8 @@
     position: absolute;
     left: 69.5%;
     top: 3%;
+    max-width: 100%;
+    max-height: 100%;
 }
 
 .thanqa-test-runs-form {
@@ -194,6 +200,8 @@
     position: absolute;
     left: 70.5%;
     bottom: 40%;
+    max-width: 100%;
+    max-height: 100%;
 }
 
 .thanqa-current-test-plan-short-info {
@@ -451,8 +459,7 @@
 }
 
 .thanqa-modal-author-placeholder {
-    width: 300px;
-    height: 60px;
+    width: 250px;
     color: #919EAB;
     font-family: Inter, serif;
     font-size: 20px;
@@ -460,8 +467,9 @@
     font-weight: 400;
     line-height: normal;
     position: relative;
-    top: 30%;
+    top: 10%;
     padding-left: 5px;
+    display: inline-block;
 }
 
 .thanqa-close-modal {
@@ -511,9 +519,63 @@
     display: inline-block;
 }
 
+.thanqa-authors-list {
+    width: 253px;
+    height: 138px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    border: 5px solid #FFF;
+    background: #FFF;
+    box-shadow: 20px 20px 40px 0 rgba(0, 0, 0, 0.07);
+    position: relative;
+    top: 43%
+}
+
+.thanqa-authors-list-hidden {
+    width: 43px;
+    height: 33px;
+    flex-shrink: 0;
+    background: url("../icons/Expand_down.svg");
+    position: relative;
+    display: inline-block;
+    left: 15%;
+    top: 25%;
+}
+
+.thanqa-authors-list-expanded {
+    width: 43px;
+    height: 33px;
+    flex-shrink: 0;
+    background: url("../icons/Expand_up.svg");
+    position: relative;
+    display: inline-block;
+    left: 15%;
+    top: 25%;
+}
+
 .thanqa-clear-datepicker-icon {
     width: 30px;
     height: 30px;
     flex-shrink: 0;
     background: url("../icons/Close_square.svg");
 }
+
+.thanqa-author-field {
+    width: 253px;
+    height: 70px;
+    flex-shrink: 0;
+    background: #FFFFFF;
+}
+
+.thanqa-author {
+    color: #000;
+    font-family: Inter, serif;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    position: relative;
+    top: 30%;
+    background: none;
+}
+
